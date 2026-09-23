@@ -1730,7 +1730,7 @@ footer .footer-contact { line-height: 1.8; }
         <span style="color:var(--text-muted); font-size:13px;">to</span>
         <input type="number" class="form-input" id="lbYearTo" value="2026" style="width:88px;">
         <button class="btn btn-sm btn-primary" onclick="archiveLoadLeaders()">Update</button>
-        <span style="color:var(--text-muted); font-size:12px;">minimum 5 starts</span>
+        <span style="color:var(--text-muted); font-size:12px;">minimum 5 starts &middot; top 100 by wins &middot; races only (no hunter paces, pony or lead-line events)</span>
       </div>
       <div style="overflow-x:auto;">
         <table class="data-table" id="lbTable" style="width:100%;">
@@ -2468,6 +2468,7 @@ async function archiveLoad() {
     const o = {};
     for (let i = 0; i < F.length; i++) o[F[i]] = V[F[i]][row[i]];
     o.weight = row[F.length]; o.purse = row[F.length+1]; o.year = row[F.length+2];
+    o.hid = row[F.length+3] || 0;
     return o;
   });
   // one sorted vocabulary per field, so autocomplete never scans 150,000 rows
@@ -2760,61 +2761,48 @@ function archiveSwitchTab(btn, tab) {
 function archiveLoadLeaders() {
   const cat = document.getElementById('lbCategory').value;
   const catLabel = { rider:'Rider', trainer:'Trainer', owner:'Owner', horse:'Horse', sire:'Sire' }[cat] || cat;
-  // Demo leaderboard data
-  const leaders = {
-    rider: [
-      { name:'Walsh, G.', starts:42, w:12, p2:8, p3:6, earnings:32500 },
-      { name:'Murphy, T.', starts:38, w:10, p2:7, p3:5, earnings:28400 },
-      { name:'Hendriks, B.', starts:31, w:7, p2:5, p3:4, earnings:18200 },
-      { name:'Rafter, K.', starts:28, w:6, p2:4, p3:5, earnings:16800 },
-      { name:'Dalton, P.', starts:25, w:5, p2:3, p3:4, earnings:12500 },
-      { name:'Young, S.', starts:22, w:4, p2:3, p3:2, earnings:9800 },
-    ],
-    trainer: [
-      { name:'Walsh, G.', starts:56, w:15, p2:10, p3:8, earnings:42000 },
-      { name:'Voss, J.', starts:44, w:11, p2:8, p3:6, earnings:35200 },
-      { name:'Fisher, A.', starts:35, w:9, p2:5, p3:4, earnings:22400 },
-      { name:'Meister, J.', starts:30, w:6, p2:5, p3:3, earnings:15600 },
-    ],
-    owner: [
-      { name:'Timber Creek Farm', starts:34, w:9, p2:6, p3:5, earnings:24500 },
-      { name:'Augustin Stable', starts:28, w:8, p2:4, p3:4, earnings:21600 },
-      { name:'Iron Horse Farm', starts:22, w:5, p2:3, p3:3, earnings:14200 },
-      { name:'Kinross Farm', starts:18, w:3, p2:4, p3:2, earnings:9800 },
-    ],
-    horse: [
-      { name:'FLATTERER', starts:18, w:7, p2:3, p3:2, earnings:28500 },
-      { name:'GALLORETTE', starts:10, w:4, p2:2, p3:1, earnings:12400 },
-      { name:'AMERICAN FARMER', starts:12, w:3, p2:1, p3:1, earnings:8750 },
-      { name:'NIGHTCAP', starts:8, w:2, p2:2, p3:1, earnings:5300 },
-      { name:'BOURBON COURAGE', starts:7, w:1, p2:1, p3:1, earnings:3900 },
-    ],
-    sire: [
-      { name:'Ghostzapper', starts:10, w:4, p2:2, p3:1, earnings:12400 },
-      { name:'Mo Exception', starts:10, w:3, p2:2, p3:2, earnings:9500 },
-      { name:'Gio Ponti', starts:12, w:3, p2:1, p3:1, earnings:8750 },
-      { name:'War Front', starts:8, w:2, p2:2, p3:1, earnings:5300 },
-      { name:'Curlin', starts:7, w:1, p2:1, p3:1, earnings:3900 },
-      { name:'Blame', starts:6, w:0, p2:1, p3:0, earnings:600 },
-    ],
-  };
-  const data = leaders[cat] || [];
-
-  document.getElementById('lbThead').innerHTML =
-    '<th>Rank</th><th>' + catLabel + '</th><th>Starts</th><th>1st</th><th>2nd</th><th>3rd</th><th>Win%</th><th>Earnings</th>';
-
-  document.getElementById('lbTbody').innerHTML = data.map((d, i) =>
-    '<tr>' +
+  const thead = document.getElementById('lbThead'), tbody = document.getElementById('lbTbody');
+  thead.innerHTML = '<th>Rank</th><th>' + catLabel + '</th><th>Starts</th><th>1st</th><th>2nd</th><th>3rd</th><th>Win%</th><th>Earnings</th>';
+  if (!DEMO_ARCHIVE.length) {
+    tbody.innerHTML = '<tr><td colspan="8" style="color:var(--text-muted);">The archive is still loading&hellip;</td></tr>';
+    return;
+  }
+  const yf = document.getElementById('lbYearFrom'), yt = document.getElementById('lbYearTo');
+  if (!yf.dataset.init) { yf.value = ARCHIVE_META.y0; yt.value = ARCHIVE_META.y1; yf.dataset.init = '1'; }
+  const y0 = parseInt(yf.value) || ARCHIVE_META.y0, y1 = parseInt(yt.value) || ARCHIVE_META.y1;
+  const agg = new Map();
+  for (const r of DEMO_ARCHIVE) {
+    if (r.year < y0 || r.year > y1 || r.type === 'Hunter Pace' || r.type === 'Junior' || r.type === 'Exhibition') continue;
+    const name = r[cat];
+    if (!name) continue;
+    const key = cat === 'horse' ? (r.hid || name) : name;
+    let a = agg.get(key);
+    if (!a) { a = { name, starts:0, w:0, p2:0, p3:0, earnings:0, yMin:r.year, yMax:r.year }; agg.set(key, a); }
+    a.starts++;
+    if (r.fin === '1st') a.w++; else if (r.fin === '2nd') a.p2++; else if (r.fin === '3rd') a.p3++;
+    a.earnings += r.purse || 0;
+    if (r.year < a.yMin) a.yMin = r.year; if (r.year > a.yMax) a.yMax = r.year;
+  }
+  let data = Array.from(agg.values()).filter(d => d.starts >= 5);
+  data.sort((a, b) => b.w - a.w || b.earnings - a.earnings || b.starts - a.starts || a.name.localeCompare(b.name));
+  data = data.slice(0, 100);
+  // a horse name shared by more than one animal: show the years each one raced
+  const seen = {};
+  if (cat === 'horse') data.forEach(d => { seen[d.name] = (seen[d.name] || 0) + 1; });
+  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  tbody.innerHTML = data.length ? data.map((d, i) => {
+    const tag = seen[d.name] > 1 ? ' <span style="color:var(--text-muted); font-size:12px;">(' + d.yMin + (d.yMax > d.yMin ? '&ndash;' + d.yMax : '') + ')</span>' : '';
+    return '<tr>' +
       '<td style="font-weight:700;">' + (i+1) + '</td>' +
-      '<td><span style="cursor:pointer; border-bottom:1px dotted #b9c0d0;" onclick="archiveAddFilter(\'' + cat + '\',\'' + d.name.replace(/'/g,"\\'") + '\')">' + d.name + '</span></td>' +
-      '<td>' + d.starts + '</td>' +
-      '<td>' + d.w + '</td>' +
-      '<td>' + d.p2 + '</td>' +
-      '<td>' + d.p3 + '</td>' +
-      '<td>' + (d.starts ? (d.w/d.starts*100).toFixed(1) : '0') + '%</td>' +
+      '<td><span style="cursor:pointer; border-bottom:1px dotted #b9c0d0;" onclick="archiveAddFilter(\'' + cat + '\',\'' + d.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'") + '\')">' + esc(d.name) + '</span>' + tag + '</td>' +
+      '<td>' + d.starts.toLocaleString() + '</td>' +
+      '<td>' + d.w.toLocaleString() + '</td>' +
+      '<td>' + d.p2.toLocaleString() + '</td>' +
+      '<td>' + d.p3.toLocaleString() + '</td>' +
+      '<td>' + (d.w/d.starts*100).toFixed(1) + '%</td>' +
       '<td>$' + d.earnings.toLocaleString() + '</td>' +
-    '</tr>'
-  ).join('');
+    '</tr>';
+  }).join('') : '<tr><td colspan="8" style="color:var(--text-muted);">No one with 5 or more starts in those years.</td></tr>';
 }
 
 // Close autocomplete on outside click
@@ -3167,6 +3155,8 @@ window.addEventListener('online', () => document.getElementById('offlineBar').cl
                          + f(m.meets) + ' meets &middot; updated ' + m.built;
     const y = document.getElementById('archiveY0'); if (y) y.textContent = m.y0;
     if (Object.keys(archiveFilters).length) archiveRun();   // a search typed before loading finished
+    const lb = document.getElementById('archiveLeaders');
+    if (lb && lb.style.display !== 'none') archiveLoadLeaders();
   }).catch(e => {
     if (el) el.textContent = 'The archive could not be loaded: ' + e.message;
     console.error(e);
