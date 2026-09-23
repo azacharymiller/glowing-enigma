@@ -1725,13 +1725,14 @@ footer .footer-contact { line-height: 1.8; }
           <option value="horse">Horses</option>
           <option value="sire">Sires</option>
         </select>
-        <span style="color:var(--text-muted); font-size:13px;">from</span>
+        <select class="form-select" id="lbScope" style="width:auto;" onchange="archiveLoadLeaders()"><option value="sanctioned" selected>Sanctioned races</option><option value="p2p">Point-to-point races</option><option value="all">All races</option></select><span style="color:var(--text-muted); font-size:13px;">from</span>
         <input type="number" class="form-input" id="lbYearFrom" value="1967" style="width:88px;">
         <span style="color:var(--text-muted); font-size:13px;">to</span>
         <input type="number" class="form-input" id="lbYearTo" value="2026" style="width:88px;">
         <button class="btn btn-sm btn-primary" onclick="archiveLoadLeaders()">Update</button>
-        <span style="color:var(--text-muted); font-size:12px;">minimum 5 starts &middot; top 100 by wins &middot; races only (no hunter paces, pony or lead-line events)</span>
+        <span style="color:var(--text-muted); font-size:12px;">minimum 5 starts &middot; top 100 by wins</span>
       </div>
+      <p id="lbNote" style="color:var(--text-secondary); font-size:13px; margin:-6px 0 14px; max-width:760px;">Wins recorded in this archive, <span class="lbY0">1966</span>&ndash;present. The archive does not yet include races before <span class="lbY0">1966</span> and is incomplete for the late 1960s and 1970s, so career totals for riders active then are understated (Joe Aitcheson, Jr., for example, retired with 440 jump wins). Hunter paces, pony, lead-line and field-masters events are never counted.</p>
       <div style="overflow-x:auto;">
         <table class="data-table" id="lbTable" style="width:100%;">
           <thead><tr id="lbThead"></tr></thead>
@@ -2468,7 +2469,7 @@ async function archiveLoad() {
     const o = {};
     for (let i = 0; i < F.length; i++) o[F[i]] = V[F[i]][row[i]];
     o.weight = row[F.length]; o.purse = row[F.length+1]; o.year = row[F.length+2];
-    o.hid = row[F.length+3] || 0;
+    o.hid = row[F.length+3] || 0; o.sanc = row[F.length+4] || 0;
     return o;
   });
   // one sorted vocabulary per field, so autocomplete never scans 150,000 rows
@@ -2768,11 +2769,14 @@ function archiveLoadLeaders() {
     return;
   }
   const yf = document.getElementById('lbYearFrom'), yt = document.getElementById('lbYearTo');
-  if (!yf.dataset.init) { yf.value = ARCHIVE_META.y0; yt.value = ARCHIVE_META.y1; yf.dataset.init = '1'; }
+  if (!yf.dataset.init) { yf.value = ARCHIVE_META.y0; yt.value = ARCHIVE_META.y1; yf.dataset.init = '1';
+    document.querySelectorAll('.lbY0').forEach(e => e.textContent = ARCHIVE_META.y0); }
   const y0 = parseInt(yf.value) || ARCHIVE_META.y0, y1 = parseInt(yt.value) || ARCHIVE_META.y1;
+  const scope = (document.getElementById('lbScope') || {}).value || 'sanctioned';
   const agg = new Map();
   for (const r of DEMO_ARCHIVE) {
     if (r.year < y0 || r.year > y1 || r.type === 'Hunter Pace' || r.type === 'Junior' || r.type === 'Exhibition') continue;
+    if ((scope === 'sanctioned' && !r.sanc) || (scope === 'p2p' && r.sanc)) continue;
     const name = r[cat];
     if (!name) continue;
     const key = cat === 'horse' ? (r.hid || name) : name;
