@@ -1,0 +1,3161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Central Entry Office</title>
+<style>
+/* ===== DESIGN SYSTEM ===== */
+:root {
+  --racing-green: #1a4d2e;
+  --racing-green-light: #2a6b40;
+  --racing-green-dark: #0f3420;
+  --cream: #fdf8f0;
+  --cream-dark: #f5ead8;
+  --warm-white: #fefcf9;
+  --gold: #c9a84c;
+  --gold-light: #e8d48b;
+  --gold-dark: #a68a2e;
+  --brown: #5c3d2e;
+  --brown-light: #8b6b5a;
+  --red-status: #c0392b;
+  --green-status: #27ae60;
+  --blue-status: #2980b9;
+  --orange-status: #e67e22;
+  --text-primary: #2c1810;
+  --text-secondary: #6b5a4e;
+  --text-muted: #9b8a7e;
+  --border: #e0d5c8;
+  --border-light: #efe8dd;
+  --shadow-sm: 0 1px 3px rgba(44,24,16,0.08);
+  --shadow-md: 0 4px 12px rgba(44,24,16,0.1);
+  --shadow-lg: 0 8px 24px rgba(44,24,16,0.12);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --font-serif: 'Georgia', 'Times New Roman', serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --max-width: 1100px;
+  --header-height: 64px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background: var(--cream);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* ===== HEADER / NAV ===== */
+header {
+  background: var(--racing-green);
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-md);
+}
+.header-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 16px;
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: white;
+}
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--racing-green-dark);
+  font-family: var(--font-serif);
+}
+.logo-text {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+.logo-text .subtitle {
+  font-size: 10px;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  opacity: 0.7;
+  display: block;
+  line-height: 1;
+  margin-top: 1px;
+}
+
+/* Desktop nav */
+nav.desktop-nav {
+  display: flex;
+  gap: 4px;
+}
+nav.desktop-nav a {
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+nav.desktop-nav a:hover,
+nav.desktop-nav a.active {
+  color: white;
+  background: rgba(255,255,255,0.12);
+}
+nav.desktop-nav a.active {
+  background: rgba(255,255,255,0.18);
+}
+
+/* Mobile hamburger */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  line-height: 1;
+}
+
+/* Mobile bottom nav */
+nav.mobile-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid var(--border);
+  z-index: 100;
+  padding: 4px 0 max(4px, env(safe-area-inset-bottom));
+}
+nav.mobile-nav .nav-items {
+  display: flex;
+  justify-content: space-around;
+}
+nav.mobile-nav a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 500;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s;
+  min-width: 56px;
+}
+nav.mobile-nav a .nav-icon { font-size: 20px; }
+nav.mobile-nav a.active { color: var(--racing-green); }
+
+@media (max-width: 768px) {
+  .desktop-nav { display: none !important; }
+  .hamburger { display: block; }
+  nav.mobile-nav { display: block; }
+  .logo-text .subtitle { display: none; }
+  body { padding-bottom: 70px; }
+}
+
+/* ===== PAGE CONTAINER ===== */
+.page { display: none; }
+.page.active { display: block; }
+.page-content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+.page-title {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--racing-green-dark);
+  margin-bottom: 4px;
+}
+.page-subtitle {
+  color: var(--text-secondary);
+  font-size: 15px;
+  margin-bottom: 24px;
+}
+
+/* ===== CARDS ===== */
+.card {
+  background: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+}
+.card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.card-header h3 {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--racing-green-dark);
+}
+.card-body { padding: 20px; }
+
+/* ===== BADGES / PILLS ===== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.badge-results { background: #e8f5e9; color: #2e7d32; }
+.badge-overnight { background: #e3f2fd; color: #1565c0; }
+.badge-entries-open { background: #fff3e0; color: #e65100; }
+.badge-entries-closed { background: #fce4ec; color: #c62828; }
+.badge-upcoming { background: var(--cream-dark); color: var(--text-secondary); }
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.btn-primary {
+  background: var(--racing-green);
+  color: white;
+}
+.btn-primary:hover { background: var(--racing-green-light); }
+.btn-secondary {
+  background: white;
+  color: var(--racing-green);
+  border: 1.5px solid var(--racing-green);
+}
+.btn-secondary:hover { background: #f0f7f2; }
+.btn-gold {
+  background: var(--gold);
+  color: var(--racing-green-dark);
+}
+.btn-gold:hover { background: var(--gold-light); }
+.btn-sm { padding: 6px 14px; font-size: 13px; }
+.btn-lg { padding: 14px 28px; font-size: 16px; }
+.btn-block { width: 100%; justify-content: center; }
+
+/* ===== FORM ELEMENTS ===== */
+.form-group { margin-bottom: 20px; }
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 16px; /* prevents iOS zoom */
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background: white;
+  transition: border-color 0.15s;
+  -webkit-appearance: none;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none;
+  border-color: var(--racing-green);
+  box-shadow: 0 0 0 3px rgba(26,77,46,0.1);
+}
+.form-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b5a4e' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+.form-textarea { resize: vertical; min-height: 100px; }
+
+/* ===== INLINE FILTER BAR ===== */
+.filter-bar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: end;
+  margin-bottom: 20px;
+}
+.filter-bar .form-group { margin-bottom: 0; flex: 1; min-width: 150px; }
+@media (max-width: 768px) {
+  .filter-bar { flex-direction: column; }
+  .filter-bar .form-group { min-width: 100%; }
+}
+
+/* ===== TABLES ===== */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.data-table th {
+  text-align: left;
+  padding: 10px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+.data-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 14px;
+}
+.data-table tr:hover td { background: var(--cream); }
+.data-table .meet-name {
+  font-weight: 600;
+  color: var(--racing-green-dark);
+}
+.data-table .meet-date {
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* Mobile: table → cards */
+@media (max-width: 768px) {
+  .data-table thead { display: none; }
+  .data-table tr {
+    display: block;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .data-table tr:hover td { background: transparent; }
+  .data-table td {
+    display: block;
+    padding: 2px 0;
+    border: none;
+  }
+  .data-table td::before {
+    content: attr(data-label);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .data-table td:first-child { margin-bottom: 4px; }
+}
+
+/* ===== MEET CARDS (mobile alternative) ===== */
+.meet-card-list { display: flex; flex-direction: column; gap: 10px; }
+.meet-card {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  border: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+}
+.meet-card:hover { box-shadow: var(--shadow-md); }
+.meet-card-info { flex: 1; min-width: 0; }
+.meet-card-name {
+  font-weight: 600;
+  color: var(--racing-green-dark);
+  font-size: 15px;
+  margin-bottom: 2px;
+}
+.meet-card-date { font-size: 13px; color: var(--text-secondary); }
+.meet-card-arrow {
+  color: var(--text-muted);
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+/* ===== ENTRY FORM (phone-optimized) ===== */
+.entry-steps {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.entry-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.step-number {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  background: var(--border);
+  color: var(--text-muted);
+}
+.step-number.active {
+  background: var(--racing-green);
+  color: white;
+}
+.step-number.done {
+  background: var(--green-status);
+  color: white;
+}
+.step-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.step-label.active { color: var(--text-primary); font-weight: 600; }
+.step-connector {
+  width: 24px;
+  height: 2px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+.step-connector.done { background: var(--green-status); }
+
+.entry-form-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 24px;
+  border: 1px solid var(--border-light);
+}
+@media (max-width: 768px) {
+  .entry-form-card { padding: 20px 16px; border-radius: var(--radius-md); }
+}
+
+/* Large touch targets for mobile */
+.touch-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: 10px;
+}
+.touch-option:hover { border-color: var(--racing-green-light); }
+.touch-option.selected {
+  border-color: var(--racing-green);
+  background: #f0f7f2;
+}
+.touch-option-icon {
+  font-size: 24px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream);
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+.touch-option-text { flex: 1; }
+.touch-option-title { font-weight: 600; font-size: 15px; }
+.touch-option-desc { font-size: 13px; color: var(--text-secondary); }
+
+/* ===== UPLOAD ZONE ===== */
+.upload-zone {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--warm-white);
+}
+.upload-zone:hover, .upload-zone.drag-over {
+  border-color: var(--racing-green);
+  background: #f0f7f2;
+}
+.upload-zone-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.6; }
+.upload-zone-text { font-size: 16px; font-weight: 500; color: var(--text-secondary); }
+.upload-zone-hint { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
+
+/* ===== OFFLINE INDICATOR ===== */
+.offline-bar {
+  background: var(--orange-status);
+  color: white;
+  text-align: center;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  display: none;
+}
+.offline-bar.show { display: block; }
+
+/* ===== SYNC STATUS ===== */
+.sync-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #fff8e1;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+.sync-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--orange-status);
+  flex-shrink: 0;
+}
+.sync-dot.synced { background: var(--green-status); }
+
+/* ===== RESULTS PREVIEW TABLE ===== */
+.results-preview {
+  overflow-x: auto;
+  margin-top: 16px;
+}
+.results-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.results-preview th {
+  background: var(--racing-green);
+  color: white;
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+.results-preview td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-light);
+  white-space: nowrap;
+}
+.results-preview tr:nth-child(even) td { background: var(--cream); }
+
+/* ===== HOME PAGE HERO ===== */
+.hero {
+  background: linear-gradient(135deg, var(--racing-green-dark) 0%, var(--racing-green) 50%, var(--racing-green-light) 100%);
+  color: white;
+  padding: 48px 16px;
+  text-align: center;
+}
+.hero h1 {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  letter-spacing: -0.3px;
+}
+.hero p {
+  font-size: 17px;
+  opacity: 0.85;
+  max-width: 500px;
+  margin: 0 auto 28px;
+  line-height: 1.6;
+}
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+@media (max-width: 768px) {
+  .hero { padding: 32px 16px; }
+  .hero h1 { font-size: 28px; }
+  .hero p { font-size: 15px; }
+  .hero-actions { flex-direction: column; align-items: center; }
+  .hero-actions .btn { width: 100%; max-width: 280px; }
+}
+
+/* ===== QUICK LINKS GRID ===== */
+.quick-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+.quick-link {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+  transition: all 0.15s;
+  cursor: pointer;
+}
+.quick-link:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.quick-link-icon { font-size: 32px; margin-bottom: 8px; }
+.quick-link-title { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+.quick-link-desc { font-size: 13px; color: var(--text-secondary); }
+
+/* ===== NOTICES ===== */
+.notice {
+  background: white;
+  border-left: 4px solid var(--gold);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+.notice-date { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+.notice-text { font-size: 14px; line-height: 1.5; }
+
+/* ===== TABS ===== */
+.tab-bar {
+  display: flex;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+.tab-btn {
+  padding: 10px 20px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.15s;
+}
+.tab-btn:hover { color: var(--text-primary); }
+.tab-btn.active {
+  color: var(--racing-green);
+  border-bottom-color: var(--racing-green);
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: var(--racing-green-dark);
+  color: rgba(255,255,255,0.7);
+  padding: 32px 16px;
+  margin-top: 48px;
+  font-size: 13px;
+}
+footer .footer-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+footer a { color: var(--gold-light); text-decoration: none; }
+footer a:hover { color: var(--gold); }
+footer .footer-contact { line-height: 1.8; }
+@media (max-width: 768px) {
+  footer { margin-bottom: 60px; }
+  footer .footer-inner { flex-direction: column; text-align: center; }
+}
+
+/* ===== MOBILE SLIDE MENU ===== */
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 200;
+}
+.mobile-menu-overlay.open { display: block; }
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 100%;
+  background: white;
+  z-index: 201;
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
+  padding: 20px;
+  overflow-y: auto;
+}
+.mobile-menu.open { transform: translateX(0); }
+.mobile-menu a {
+  display: block;
+  padding: 14px 16px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  margin-bottom: 4px;
+}
+.mobile-menu a:hover, .mobile-menu a.active { background: var(--cream); color: var(--racing-green); }
+.mobile-menu-close {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  padding: 8px;
+  margin-bottom: 12px;
+  color: var(--text-secondary);
+}
+
+/* ===== UTILITY ===== */
+.mt-8 { margin-top: 8px; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-24 { margin-bottom: 24px; }
+.text-center { text-align: center; }
+.text-muted { color: var(--text-muted); }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.gap-12 { gap: 12px; }
+.hidden { display: none !important; }
+
+/* ===== GRID LAYOUT ===== */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+
+/* ===== LOGIN MODAL ===== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 300;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalIn 0.2s ease;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(12px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.modal-header {
+  padding: 24px 24px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-header h2 {
+  font-family: var(--font-serif);
+  color: var(--racing-green-dark);
+  font-size: 22px;
+}
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+}
+.modal-close:hover { background: var(--cream); color: var(--text-primary); }
+.modal-body { padding: 20px 24px 24px; }
+.modal-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.modal-divider::before, .modal-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* User header bar (logged in state) */
+.user-bar {
+  display: none;
+  align-items: center;
+  gap: 10px;
+}
+.user-bar.show { display: flex; }
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--racing-green-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  font-family: var(--font-serif);
+  flex-shrink: 0;
+}
+.user-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  white-space: nowrap;
+}
+.user-role {
+  font-size: 10px;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.login-btn {
+  background: rgba(255,255,255,0.12);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.login-btn:hover { background: rgba(255,255,255,0.2); }
+
+/* Role selector in login */
+.role-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: 10px;
+}
+.role-option:hover { border-color: var(--racing-green-light); }
+.role-option.selected { border-color: var(--racing-green); background: #f0f7f2; }
+.role-icon {
+  font-size: 28px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream);
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+.role-title { font-weight: 600; font-size: 15px; }
+.role-desc { font-size: 13px; color: var(--text-secondary); }
+
+/* Trainer profile card (on entry page) */
+.profile-banner {
+  background: linear-gradient(135deg, var(--racing-green-dark), var(--racing-green));
+  color: white;
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.profile-banner-info { display: flex; align-items: center; gap: 12px; }
+.profile-banner .user-avatar { width: 40px; height: 40px; font-size: 16px; }
+.profile-banner-name { font-weight: 600; font-size: 16px; }
+.profile-banner-detail { font-size: 13px; opacity: 0.8; }
+.profile-banner-edit {
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.25);
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.profile-banner-edit:hover { background: rgba(255,255,255,0.25); }
+
+/* Archive stats */
+.archive-stat { padding: 0 18px 0 0; margin-right: 18px; border-right: 1px solid var(--border); }
+.archive-stat:last-child { border-right: none; margin-right: 0; padding-right: 0; }
+.archive-stat-v { font-family: var(--font-serif); font-weight: 700; font-size: 20px; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.archive-stat-l { font-size: 11.5px; color: var(--text-muted); letter-spacing: 0.03em; }
+.archive-stat-v.win { color: var(--gold-dark); }
+.archive-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: #e8f0eb; border: 1px solid #b8d4c2; color: var(--racing-green);
+  border-radius: 20px; padding: 4px 8px 4px 11px; font-size: 13px;
+}
+.archive-chip b { font-weight: 600; }
+.archive-chip i { font-style: normal; color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+.archive-chip button { border: 0; background: none; color: var(--racing-green); cursor: pointer; font-size: 15px; line-height: 1; padding: 0 2px; }
+.archive-chip button:hover { color: var(--text-primary); }
+#archiveTable thead th { cursor: pointer; user-select: none; white-space: nowrap; background: var(--cream-dark); font-size: 12px; letter-spacing: 0.03em; }
+#archiveTable thead th:hover { background: #e8e0d2; }
+#archiveTable thead th .sort-arrow { color: var(--racing-green); margin-left: 4px; font-size: 10px; }
+#archiveTable tbody tr { cursor: pointer; }
+#archiveTable tbody tr:hover { background: #f8faf8; }
+#archiveTable tbody tr.selected { background: #e8f0eb; }
+#archiveTable td.win-cell { color: var(--gold-dark); font-weight: 700; }
+/* Leaderboard table inherits .data-table styles */
+@media (max-width: 768px) {
+  .archive-stat { padding: 0 12px 0 0; margin-right: 12px; }
+  .archive-stat-v { font-size: 17px; }
+}
+
+/* Entry tally bar */
+.entry-tally {
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.entry-tally-count {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.entry-tally-badge {
+  background: var(--racing-green);
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  font-family: var(--font-serif);
+}
+.entry-tally-label { font-size: 14px; font-weight: 500; }
+.entry-tally-fee {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--racing-green-dark);
+}
+/* Checkout */
+.checkout-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 14px;
+}
+.checkout-item:last-child { border-bottom: none; }
+.checkout-item-horse { font-weight: 600; }
+.checkout-item-detail { font-size: 13px; color: var(--text-secondary); }
+.checkout-item-fee { font-weight: 600; font-family: var(--font-serif); }
+.checkout-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0 0;
+  border-top: 2px solid var(--racing-green-dark);
+  margin-top: 8px;
+}
+.checkout-total-label {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--racing-green-dark);
+}
+.checkout-total-amount {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--racing-green-dark);
+}
+.stripe-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 12px;
+}
+.stripe-badge svg { width: 14px; height: 14px; fill: currentColor; }
+
+/* Saved horse list */
+.saved-horse {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.saved-horse:hover { border-color: var(--racing-green-light); background: #f8faf8; }
+.saved-horse.selected { border-color: var(--racing-green); background: #f0f7f2; }
+.saved-horse-name { font-weight: 600; font-size: 14px; }
+.saved-horse-detail { font-size: 12px; color: var(--text-secondary); }
+
+/* Auth-gated notice */
+.auth-gate {
+  text-align: center;
+  padding: 48px 24px;
+}
+.auth-gate-icon { font-size: 48px; opacity: 0.4; margin-bottom: 16px; }
+.auth-gate h3 {
+  font-family: var(--font-serif);
+  color: var(--racing-green-dark);
+  margin-bottom: 8px;
+}
+.auth-gate p { color: var(--text-secondary); font-size: 14px; margin-bottom: 20px; }
+
+/* ===== PROFILE PAGE ===== */
+.profile-section {
+  background: white;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.profile-section h3 {
+  font-family: var(--font-serif);
+  color: var(--racing-green-dark);
+  font-size: 17px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-light);
+}
+.horse-roster-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+.horse-roster-item:last-child { border-bottom: none; }
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.page.active .page-content { animation: fadeIn 0.2s ease; }
+</style>
+</head>
+<body>
+<div style="background:#7a5c1e;color:#fff;text-align:center;font:600 13px/1.4 system-ui,sans-serif;padding:7px 12px;position:relative;z-index:9999;">Demo preview &mdash; not the official Central Entry Office website. Log-in, entries and payments are simulated. The Results Archive is real.</div>
+
+<!-- Offline indicator -->
+<div class="offline-bar" id="offlineBar">You're offline — results will be saved locally and synced when you reconnect</div>
+
+<!-- Header -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo" onclick="showPage('home'); return false;">
+      <div class="logo-icon">C</div>
+      <div class="logo-text">
+        Central Entry Office
+        <span class="subtitle">Steeplechase &amp; Point-to-Point</span>
+      </div>
+    </a>
+    <nav class="desktop-nav">
+      <a href="#" onclick="showPage('home'); return false;" class="active" data-page="home">Home</a>
+      <a href="#" onclick="showPage('meets'); return false;" data-page="meets">Meets</a>
+      <a href="#" onclick="handleEnterHorse(); return false;" data-page="entry">Enter</a>
+      <a href="#" onclick="showPage('reports'); return false;" data-page="reports">Reports</a>
+      <a href="#" onclick="showPage('standings'); return false;" data-page="standings">Standings</a>
+      <a href="#" onclick="showPage('admin'); return false;" data-page="admin" class="admin-only" style="display:none;">Admin</a>
+    </nav>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div class="user-bar" id="userBar">
+        <div class="user-avatar" id="userAvatar">Z</div>
+        <div style="line-height: 1.2; display: none;" class="user-info-text" id="userInfoText">
+          <div class="user-name" id="userName">Zach Miller</div>
+          <div class="user-role" id="userRole">Trainer</div>
+        </div>
+        <button class="login-btn" onclick="showPage('profile')" style="font-size: 11px; padding: 4px 10px;">Profile</button>
+        <button class="login-btn" onclick="logOut()" style="font-size: 11px; padding: 4px 10px;">Log out</button>
+      </div>
+      <button class="login-btn" id="loginBtn" onclick="openLogin()">Log In</button>
+      <button class="hamburger" onclick="toggleMobileMenu()">&#9776;</button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile slide menu -->
+<div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="toggleMobileMenu()"></div>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" onclick="toggleMobileMenu()">&times;</button>
+  <!-- Mobile login/profile section -->
+  <div id="mobileLoginSection" style="padding: 12px 16px; margin-bottom: 8px;">
+    <button class="btn btn-primary btn-block" onclick="openLogin(); toggleMobileMenu();">Log In / Sign Up</button>
+  </div>
+  <div id="mobileUserSection" style="display: none; padding: 12px 16px; margin-bottom: 8px; background: var(--cream); border-radius: var(--radius-sm);">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+      <div class="user-avatar" id="mobileUserAvatar" style="background: var(--racing-green); color: white;">Z</div>
+      <div>
+        <div style="font-weight: 600; font-size: 15px;" id="mobileUserName">Zach Miller</div>
+        <div style="font-size: 12px; color: var(--text-muted);" id="mobileUserRole">Trainer</div>
+      </div>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button class="btn btn-sm btn-secondary" style="flex:1;" onclick="showPage('profile'); toggleMobileMenu();">My Profile</button>
+      <button class="btn btn-sm btn-secondary" style="flex:1;" onclick="logOut(); toggleMobileMenu();">Log Out</button>
+    </div>
+  </div>
+  <a href="#" onclick="showPage('home'); toggleMobileMenu(); return false;" class="active" data-page="home">Home</a>
+  <a href="#" onclick="showPage('meets'); toggleMobileMenu(); return false;" data-page="meets">Meets &amp; Results</a>
+  <a href="#" onclick="handleEnterHorse(); toggleMobileMenu(); return false;" data-page="entry">Enter a Horse</a>
+  <a href="#" onclick="showPage('reports'); toggleMobileMenu(); return false;" data-page="reports">Reports</a>
+  <a href="#" onclick="showPage('standings'); toggleMobileMenu(); return false;" data-page="standings">Standings</a>
+  <a href="#" onclick="showPage('admin'); toggleMobileMenu(); return false;" data-page="admin" class="admin-only" style="display:none;">Results Admin</a>
+  <hr style="margin: 16px 0; border: none; border-top: 1px solid var(--border);">
+  <a href="#">Race Calendar</a>
+  <a href="#">Condition Books</a>
+  <a href="#">Links</a>
+  <a href="#">VA Hall of Fame</a>
+</div>
+
+<!-- Mobile bottom nav -->
+<nav class="mobile-nav">
+  <div class="nav-items">
+    <a href="#" onclick="showPage('home'); return false;" class="active" data-page="home">
+      <span class="nav-icon">&#127968;</span> Home
+    </a>
+    <a href="#" onclick="showPage('meets'); return false;" data-page="meets">
+      <span class="nav-icon">&#127943;</span> Meets
+    </a>
+    <a href="#" onclick="handleEnterHorse(); return false;" data-page="entry">
+      <span class="nav-icon">&#9998;</span> Enter
+    </a>
+    <a href="#" onclick="showPage('reports'); return false;" data-page="reports">
+      <span class="nav-icon">&#128202;</span> Reports
+    </a>
+    <a href="#" onclick="showPage('admin'); return false;" data-page="admin" class="admin-only" style="display:none;">
+      <span class="nav-icon">&#128228;</span> Admin
+    </a>
+    <a href="#" onclick="handleAccountTap(); return false;" data-page="profile" id="mobileNavAccount">
+      <span class="nav-icon">&#128100;</span> Account
+    </a>
+  </div>
+</nav>
+
+<!-- ==================== HOME PAGE ==================== -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <h1>Central Entry Office</h1>
+    <p>Entry, overnights, and results for steeplechase and point-to-point racing in Virginia, Maryland, and the Delaware Valley.</p>
+    <div class="hero-actions">
+      <button class="btn btn-gold btn-lg" onclick="handleEnterHorse()">Enter a Horse</button>
+      <button class="btn btn-gold btn-lg" onclick="showPage('meets')">View Results</button>
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="quick-links">
+      <div class="quick-link" onclick="showPage('meets')">
+        <div class="quick-link-icon">&#127943;</div>
+        <div class="quick-link-title">Meets &amp; Results</div>
+        <div class="quick-link-desc">Browse this season's meets, overnights, and results</div>
+      </div>
+      <div class="quick-link" onclick="handleEnterHorse()">
+        <div class="quick-link-icon">&#9998;</div>
+        <div class="quick-link-title">Enter Online</div>
+        <div class="quick-link-desc">Submit entries for upcoming races from your phone</div>
+      </div>
+      <div class="quick-link" onclick="showPage('reports')">
+        <div class="quick-link-icon">&#128202;</div>
+        <div class="quick-link-title">Reports</div>
+        <div class="quick-link-desc">Look up horse records, rider stats, and race history</div>
+      </div>
+      <div class="quick-link" onclick="showPage('standings')">
+        <div class="quick-link-icon">&#127942;</div>
+        <div class="quick-link-title">Standings</div>
+        <div class="quick-link-desc">Season standings by organization and category</div>
+      </div>
+    </div>
+
+    <h3 style="font-family: var(--font-serif); color: var(--racing-green-dark); margin-top: 32px; margin-bottom: 16px;">Notices</h3>
+    <div class="notice">
+      <div class="notice-date">May 7, 2026</div>
+      <div class="notice-text">The number for entries is (484) 897-0096, however we prefer you <strong>ENTER ONLINE</strong>. Online entries and overnights/results can all be found in the Meets tab.</div>
+    </div>
+    <div class="notice">
+      <div class="notice-date">Season 2026</div>
+      <div class="notice-text">Maryland Steeplechase Association requires all ponies running in any MSA pony race to be measured before race day. Contact Forrest Kelly: (443) 869-0762.</div>
+    </div>
+    <div class="notice">
+      <div class="notice-date">Ongoing</div>
+      <div class="notice-text">Not all historical information has been entered into the database at this time. A huge thank you to The Chronicle of the Horse for making their files available.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== MEETS PAGE ==================== -->
+<div class="page" id="page-meets">
+  <div class="page-content">
+    <h1 class="page-title">Meets &amp; Results</h1>
+    <p class="page-subtitle">Browse entries, overnights, and results by season</p>
+
+    <div class="filter-bar">
+      <div class="form-group">
+        <label class="form-label">Season</label>
+        <select class="form-select" id="seasonSelect" onchange="filterMeets()">
+          <option value="2026" selected>2026</option>
+          <option value="2025">2025</option>
+          <option value="2024">2024</option>
+          <option value="2023">2023</option>
+          <option value="2022">2022</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-select" id="statusFilter" onchange="filterMeets()">
+          <option value="all">All</option>
+          <option value="entries-open">Entries Open</option>
+          <option value="overnight">Overnight</option>
+          <option value="results">Results</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Entries Open section -->
+    <div class="card mb-24">
+      <div class="card-header">
+        <h3>Open for Entries</h3>
+        <span class="badge badge-entries-open">0 Active</span>
+      </div>
+      <div class="card-body">
+        <p class="text-muted" style="text-align: center; padding: 16px;">There are currently no meets taking entries. Check back as the season progresses.</p>
+      </div>
+    </div>
+
+    <!-- Results section -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Overnights &amp; Results</h3>
+      </div>
+      <div style="overflow-x: auto;">
+        <table class="data-table" id="meetsTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Meet</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Date" class="meet-date">May 17, 2026</td>
+              <td data-label="Meet" class="meet-name">Potomac Hunt Races</td>
+              <td data-label="Status"><span class="badge badge-results">Results</span></td>
+              <td><button class="btn btn-sm btn-secondary" onclick="showMeetDetail('Potomac Hunt Races')">View</button></td>
+            </tr>
+            <tr>
+              <td data-label="Date" class="meet-date">May 16, 2026</td>
+              <td data-label="Meet" class="meet-name">Radnor Hunt Races</td>
+              <td data-label="Status"><span class="badge badge-results">Results</span></td>
+              <td><button class="btn btn-sm btn-secondary" onclick="showMeetDetail('Radnor Hunt Races')">View</button></td>
+            </tr>
+            <tr>
+              <td data-label="Date" class="meet-date">May 3, 2026</td>
+              <td data-label="Meet" class="meet-name">Loudoun Fairfax Hunt Hunter Pace</td>
+              <td data-label="Status"><span class="badge badge-results">Results</span></td>
+              <td><button class="btn btn-sm btn-secondary" onclick="showMeetDetail('Loudoun Fairfax')">View</button></td>
+            </tr>
+            <tr>
+              <td data-label="Date" class="meet-date">Apr 26, 2026</td>
+              <td data-label="Meet" class="meet-name">Middleburg Hunt Point to Point</td>
+              <td data-label="Status"><span class="badge badge-results">Results</span></td>
+              <td><button class="btn btn-sm btn-secondary" onclick="showMeetDetail('Middleburg')">View</button></td>
+            </tr>
+            <tr>
+              <td data-label="Date" class="meet-date">Apr 19, 2026</td>
+              <td data-label="Meet" class="meet-name">Loudoun Hunt Point to Point</td>
+              <td data-label="Status"><span class="badge badge-results">Results</span></td>
+              <td><button class="btn btn-sm btn-secondary" onclick="showMeetDetail('Loudoun')">View</button></td>
+            </tr>
+            <tr>
+              <td data-label="Date" class="meet-date">Apr 12, 2026</td>
+              <td data-label="Meet" class="meet-name">Mount Harmon-Wicomico Point to Point</td>
+              <td data-label="Status"><span class="badge badge-results">Results</span></td>
+              <td><button class="btn btn-sm btn-secondary" onclick="showMeetDetail('Mt Harmon')">View</button></td>
+            </tr>
+            <tr>
+              <td data-label="Date" class="meet-date">Apr 11, 2026</td>
+              <td data-label="Meet" class="meet-name">Blue Ridge Hunt Point to Point</td>
+              <td data-label="Status"><span class="badge badge-results">Results</span></td>
+              <td><button class="btn btn-sm btn-secondary" onclick="showMeetDetail('Blue Ridge')">View</button></td>
+            </tr>
+            <tr>
+              <td data-label="Date" class="meet-date">Apr 5, 2026</td>
+              <td data-label="Meet" class="meet-name">Brandywine Hills Point to Point Races</td>
+              <td data-label="Status"><span class="badge badge-results">Results</span></td>
+              <td><button class="btn btn-sm btn-secondary" onclick="showMeetDetail('Brandywine')">View</button></td>
+            </tr>
+            <tr>
+              <td data-label="Date" class="meet-date">Apr 4, 2026</td>
+              <td data-label="Meet" class="meet-name">Old Dominion Hounds Point to Point</td>
+              <td data-label="Status"><span class="badge badge-results">Results</span></td>
+              <td><button class="btn btn-sm btn-secondary" onclick="showMeetDetail('ODH')">View</button></td>
+            </tr>
+            <tr>
+              <td data-label="Date" class="meet-date">Mar 29, 2026</td>
+              <td data-label="Meet" class="meet-name">Cheshire Hunt Races</td>
+              <td data-label="Status"><span class="badge badge-results">Results</span></td>
+              <td><button class="btn btn-sm btn-secondary" onclick="showMeetDetail('Cheshire')">View</button></td>
+            </tr>
+            <tr>
+              <td data-label="Date" class="meet-date">Mar 21, 2026</td>
+              <td data-label="Meet" class="meet-name">Piedmont Fox Hounds Point to Point</td>
+              <td data-label="Status"><span class="badge badge-results">Results</span></td>
+              <td><button class="btn btn-sm btn-secondary" onclick="showMeetDetail('Piedmont')">View</button></td>
+            </tr>
+            <tr>
+              <td data-label="Date" class="meet-date">Mar 14, 2026</td>
+              <td data-label="Meet" class="meet-name">Warrenton Hunt Point to Point</td>
+              <td data-label="Status"><span class="badge badge-results">Results</span></td>
+              <td><button class="btn btn-sm btn-secondary" onclick="showMeetDetail('Warrenton')">View</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ENTRY PAGE (phone-optimized) ==================== -->
+<div class="page" id="page-entry">
+  <div class="page-content">
+    <h1 class="page-title">Enter a Horse</h1>
+    <p class="page-subtitle">Submit your entry for an upcoming meet</p>
+
+    <!-- Trainer profile banner (shown when logged in) -->
+    <div class="profile-banner hidden" id="entryProfileBanner">
+      <div class="profile-banner-info">
+        <div class="user-avatar" style="width:40px;height:40px;font-size:16px;">Z</div>
+        <div>
+          <div class="profile-banner-name" id="entryBannerName">Zach Miller</div>
+          <div class="profile-banner-detail">Timber Creek Farm &middot; 3 horses</div>
+        </div>
+      </div>
+      <button class="profile-banner-edit" onclick="showPage('profile')">Edit Profile</button>
+    </div>
+
+    <!-- Login prompt (shown when not logged in) -->
+    <div id="entryLoginPrompt" style="background: #fff8e1; border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+      <div style="font-size: 14px;"><strong>Save time:</strong> log in to prefill your owner, trainer, and horse info automatically.</div>
+      <button class="btn btn-sm btn-primary" onclick="openLogin()">Log In</button>
+    </div>
+
+    <!-- Entry tally bar (shown when entries are batched) -->
+    <div class="entry-tally hidden" id="entryTally">
+      <div class="entry-tally-count">
+        <div class="entry-tally-badge" id="entryTallyCount">0</div>
+        <div class="entry-tally-label"><span id="entryTallyLabel">entries</span> queued</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div class="entry-tally-fee" id="entryTallyFee">$0</div>
+        <button class="btn btn-sm btn-gold" onclick="goToCheckout()">Review &amp; Pay</button>
+      </div>
+    </div>
+
+    <!-- Step indicator -->
+    <div class="entry-steps">
+      <div class="entry-step"><div class="step-number active" id="stepNum1">1</div><span class="step-label active" id="stepLabel1">Meet</span></div>
+      <div class="step-connector" id="stepConn1"></div>
+      <div class="entry-step"><div class="step-number" id="stepNum2">2</div><span class="step-label" id="stepLabel2">Horse</span></div>
+      <div class="step-connector" id="stepConn2"></div>
+      <div class="entry-step"><div class="step-number" id="stepNum3">3</div><span class="step-label" id="stepLabel3">Details</span></div>
+      <div class="step-connector" id="stepConn3"></div>
+      <div class="entry-step"><div class="step-number" id="stepNum4">4</div><span class="step-label" id="stepLabel4">Confirm</span></div>
+    </div>
+
+    <!-- Step 1: Select Meet -->
+    <div class="entry-form-card" id="entryStep1">
+      <h3 style="font-family: var(--font-serif); margin-bottom: 16px; color: var(--racing-green-dark);">Select a Meet</h3>
+      <p class="text-muted mb-16" style="font-size: 14px;">Tap the meet you'd like to enter. Only meets currently accepting entries are shown.</p>
+
+      <div class="touch-option" onclick="selectMeet(this, 'Potomac Hunt Races — May 17')">
+        <div class="touch-option-icon">&#127943;</div>
+        <div class="touch-option-text">
+          <div class="touch-option-title">Potomac Hunt Races</div>
+          <div class="touch-option-desc">May 17, 2026 &middot; Entries close May 14</div>
+        </div>
+      </div>
+      <div class="touch-option" onclick="selectMeet(this, 'Radnor Hunt Races — May 16')">
+        <div class="touch-option-icon">&#127943;</div>
+        <div class="touch-option-text">
+          <div class="touch-option-title">Radnor Hunt Races</div>
+          <div class="touch-option-desc">May 16, 2026 &middot; Entries close May 13</div>
+        </div>
+      </div>
+      <div class="touch-option" onclick="selectMeet(this, 'Loudoun Fairfax Hunter Pace — May 3')">
+        <div class="touch-option-icon">&#127943;</div>
+        <div class="touch-option-text">
+          <div class="touch-option-title">Loudoun Fairfax Hunt Hunter Pace</div>
+          <div class="touch-option-desc">May 3, 2026 &middot; Entries close Apr 30</div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-block btn-lg mt-24" onclick="goToEntryStep(2)">Continue</button>
+    </div>
+
+    <!-- Step 2: Horse Info -->
+    <div class="entry-form-card hidden" id="entryStep2">
+      <h3 style="font-family: var(--font-serif); margin-bottom: 16px; color: var(--racing-green-dark);">Horse Information</h3>
+
+      <div class="form-group">
+        <label class="form-label">Horse Name</label>
+        <input type="text" class="form-input" placeholder="Start typing to search..." list="horseList" autocomplete="off">
+        <datalist id="horseList">
+          <option value="ALAR MIST">
+          <option value="AMERICAN FARMER">
+          <option value="BELLE CHASSE">
+          <option value="BOURBON COURAGE">
+          <option value="CHABLIS">
+        </datalist>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Race</label>
+        <select class="form-select">
+          <option value="">Select a race...</option>
+          <option>1st Race — Maiden Timber, 3 Miles</option>
+          <option>2nd Race — Allowance Timber, 3 Miles</option>
+          <option>3rd Race — Open Flat, 1.5 Miles</option>
+          <option>4th Race — Novice Timber, 3 Miles</option>
+          <option>5th Race — Owner-Rider Timber, 3 Miles</option>
+        </select>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Rider</label>
+          <input type="text" class="form-input" placeholder="Last, First">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Rider Status</label>
+          <select class="form-select">
+            <option>Professional</option>
+            <option>Amateur</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-top: 24px;">
+        <button class="btn btn-secondary btn-lg" style="flex:1;" onclick="goToEntryStep(1)">Back</button>
+        <button class="btn btn-primary btn-lg" style="flex:2;" onclick="goToEntryStep(3)">Continue</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Owner/Trainer Details -->
+    <div class="entry-form-card hidden" id="entryStep3">
+      <h3 style="font-family: var(--font-serif); margin-bottom: 16px; color: var(--racing-green-dark);">Owner &amp; Trainer</h3>
+
+      <div class="form-group">
+        <label class="form-label">Owner</label>
+        <input type="text" class="form-input" id="entryOwner" placeholder="Owner name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Trainer</label>
+        <input type="text" class="form-input" id="entryTrainer" placeholder="Trainer name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Assigned Weight</label>
+        <input type="number" class="form-input" id="entryWeight" placeholder="e.g. 165">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes / Preferences</label>
+        <textarea class="form-textarea" id="entryColors" placeholder="Colors, equipment, or special requests..."></textarea>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-top: 24px;">
+        <button class="btn btn-secondary btn-lg" style="flex:1;" onclick="goToEntryStep(2)">Back</button>
+        <button class="btn btn-primary btn-lg" style="flex:2;" onclick="goToEntryStep(4)">Review Entry</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Confirm -->
+    <div class="entry-form-card hidden" id="entryStep4">
+      <h3 style="font-family: var(--font-serif); margin-bottom: 16px; color: var(--racing-green-dark);">Confirm Your Entry</h3>
+
+      <div style="background: var(--cream); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 20px;">
+        <div style="font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Entry Summary</div>
+        <div style="display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; font-size: 14px;" id="entryConfirmGrid">
+          <strong>Meet:</strong> <span>Potomac Hunt Races — May 17</span>
+          <strong>Race:</strong> <span>1st Race — Maiden Timber, 3 Miles</span>
+          <strong>Horse:</strong> <span>AMERICAN FARMER</span>
+          <strong>Rider:</strong> <span>Walsh, G. (A)</span>
+          <strong>Owner:</strong> <span>Timber Creek Farm</span>
+          <strong>Trainer:</strong> <span>Walsh, G.</span>
+          <strong>Weight:</strong> <span>165 lbs</span>
+          <strong>Entry Fee:</strong> <span style="font-weight: 600; color: var(--racing-green);">$75.00</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label style="display: flex; align-items: start; gap: 10px; cursor: pointer;">
+          <input type="checkbox" style="margin-top: 3px; width: 20px; height: 20px;" id="entryConfirmCheck">
+          <span style="font-size: 14px;">I confirm this entry and agree to the conditions of the race as published in the condition book.</span>
+        </label>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-top: 24px;">
+        <button class="btn btn-secondary btn-lg" style="flex:1;" onclick="goToEntryStep(3)">Back</button>
+        <button class="btn btn-primary btn-lg" style="flex:2;" onclick="addEntryToBatch()">Add Entry</button>
+      </div>
+    </div>
+
+    <!-- Post-confirm: enter another or pay -->
+    <div class="entry-form-card hidden" id="entryStepAdded">
+      <div style="text-align: center; padding: 24px 0;">
+        <div style="font-size: 48px; margin-bottom: 12px;">&#9989;</div>
+        <h3 style="font-family: var(--font-serif); color: var(--racing-green-dark); margin-bottom: 4px;">Entry Added</h3>
+        <p style="font-size: 14px; color: var(--text-secondary);" id="addedEntryMsg">AMERICAN FARMER — Maiden Timber at Potomac Hunt</p>
+        <div style="font-size: 13px; color: var(--text-muted); margin-top: 12px;" id="addedEntryTally">1 entry &middot; $75.00 total</div>
+      </div>
+      <div style="display: flex; gap: 12px; margin-top: 8px;">
+        <button class="btn btn-secondary btn-lg" style="flex:1;" onclick="enterAnotherHorse()">
+          <span style="display: block; font-size: 15px;">Enter Another Horse</span>
+        </button>
+        <button class="btn btn-gold btn-lg" style="flex:1;" onclick="goToCheckout()">
+          <span style="display: block; font-size: 15px;">Review &amp; Pay</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Checkout / Payment -->
+    <div class="entry-form-card hidden" id="entryCheckout">
+      <h3 style="font-family: var(--font-serif); margin-bottom: 4px; color: var(--racing-green-dark);">Entry Fees</h3>
+      <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 20px;">Review your entries and submit payment to complete.</p>
+
+      <div class="card" style="margin-bottom: 20px;">
+        <div class="card-body" id="checkoutItems">
+          <!-- Populated by JS -->
+        </div>
+        <div class="card-body" style="border-top: 1px solid var(--border-light); padding-top: 16px;">
+          <div class="checkout-total">
+            <div class="checkout-total-label">Total Entry Fees</div>
+            <div class="checkout-total-amount" id="checkoutTotal">$75.00</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Payment Method</label>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <div class="touch-option selected" onclick="selectPayment(this, 'card')" style="flex: 1; min-width: 140px; padding: 14px;">
+            <div style="font-size: 22px; margin-right: 6px;">&#128179;</div>
+            <div>
+              <div style="font-weight: 600; font-size: 14px;">Credit / Debit Card</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Visa, MC, Amex</div>
+            </div>
+          </div>
+          <div class="touch-option" onclick="selectPayment(this, 'ach')" style="flex: 1; min-width: 140px; padding: 14px;">
+            <div style="font-size: 22px; margin-right: 6px;">&#127974;</div>
+            <div>
+              <div style="font-weight: 600; font-size: 14px;">Bank Transfer (ACH)</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Lower fees</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Simulated Stripe card element -->
+      <div id="paymentCardForm">
+        <div class="form-group">
+          <label class="form-label">Card Number</label>
+          <div style="background: white; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; font-size: 14px; color: var(--text-muted); display: flex; align-items: center; justify-content: space-between;">
+            <span>4242 &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull;</span>
+            <span style="font-size: 11px; letter-spacing: 0.5px; color: #635bff; font-weight: 600;">STRIPE</span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label">Expiry</label>
+            <input type="text" class="form-input" placeholder="MM / YY" value="12 / 28">
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label">CVC</label>
+            <input type="text" class="form-input" placeholder="123" value="&bull;&bull;&bull;">
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-top: 20px;">
+        <button class="btn btn-secondary btn-lg" style="flex:1;" onclick="enterAnotherHorse()">+ Add Entry</button>
+        <button class="btn btn-gold btn-lg" style="flex:2;" onclick="processPayment()">
+          Pay <span id="checkoutPayAmount">$75.00</span>
+        </button>
+      </div>
+
+      <div class="stripe-badge" style="justify-content: center; margin-top: 16px;">
+        <svg viewBox="0 0 24 24"><path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-7.076-2.19L3.36 21.79C5.27 22.934 8.55 24 12.028 24c2.32 0 4.443-.552 5.962-1.665 1.696-1.263 2.56-3.15 2.56-5.445 0-4.103-2.514-5.79-6.574-7.24z"/></svg>
+        Powered by Stripe &middot; Secure, PCI-compliant payment
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==================== REPORTS / ARCHIVE PAGE ==================== -->
+<div class="page" id="page-reports">
+  <div class="page-content" style="max-width: 1200px;">
+
+    <!-- Search bar -->
+    <div style="position: relative; margin-bottom: 16px;">
+      <input type="text" class="form-input" id="archiveSearch"
+        placeholder="Search a horse, rider, trainer, owner, venue&hellip;"
+        style="font-size: 15px; padding: 12px 16px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm);"
+        oninput="archiveAutocomplete(this.value)" autocomplete="off">
+      <div id="archiveSugg" style="display:none; position:absolute; z-index:40; left:0; right:0; top:50px; background:white; border:1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-lg); max-height:50vh; overflow:auto;"></div>
+    </div>
+
+    <!-- Filter chips -->
+    <div id="archiveChips" style="display:flex; gap:7px; flex-wrap:wrap; margin-bottom: 14px;"></div>
+
+    <!-- Summary stats bar -->
+    <div id="archiveStats" style="display:none; gap:0; flex-wrap:wrap; padding:14px 20px; background:white; border:1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 14px; box-shadow: var(--shadow-sm);"></div>
+
+    <!-- Toolbar: tabs + export -->
+    <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom: 14px;">
+      <div class="tab-bar" style="margin:0; flex-shrink:0;">
+        <button class="tab-btn active" onclick="archiveSwitchTab(this, 'starts')">Starts</button>
+        <button class="tab-btn" onclick="archiveSwitchTab(this, 'leaders')">Leaderboards</button>
+      </div>
+      <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
+        <span id="archiveCount" style="color:var(--text-muted); font-size:13px;"></span>
+        <span id="archiveSelBar" style="display:none; font-size:13px;"><strong id="archiveSelN">0</strong> selected &middot; <a href="#" onclick="archiveClearSel(); return false;" style="color:var(--racing-green);">clear</a></span>
+        <button class="btn btn-sm btn-secondary" onclick="archiveExport('pdf')">Print / PDF</button>
+        <button class="btn btn-sm btn-secondary" onclick="archiveExport('csv')">Download CSV</button>
+      </div>
+    </div>
+
+    <!-- Results table -->
+    <div id="archiveTableWrap" style="background:white; border:1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); overflow-x:auto;">
+      <!-- Landing state -->
+      <div id="archiveLanding" style="text-align:center; padding:48px 24px;">
+        <div style="font-size:48px; margin-bottom:12px; opacity:0.3;">&#127943;</div>
+        <h2 style="font-family:var(--font-serif); color:var(--racing-green-dark); margin-bottom:6px;">Archive</h2>
+        <p style="color:var(--text-secondary); font-size:14px; max-width:420px; margin:0 auto 16px;">American steeplechase and point-to-point racing, 1967&ndash;today. Search by any name to browse the full record.</p>
+        <div style="color:var(--text-muted); font-size:13px;">84,923 entries &middot; 18,407 horses &middot; 2,146 meets</div>
+      </div>
+      <!-- Data table (hidden until search) -->
+      <table class="data-table" id="archiveTable" style="display:none; width:100%; font-size:13.5px;">
+        <thead>
+          <tr id="archiveThead"></tr>
+        </thead>
+        <tbody id="archiveTbody"></tbody>
+      </table>
+    </div>
+
+    <!-- Leaderboard (hidden until tab switch) -->
+    <div id="archiveLeaders" style="display:none;">
+      <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:16px;">
+        <select class="form-select" id="lbCategory" style="width:auto;" onchange="archiveLoadLeaders()">
+          <option value="rider">Riders</option>
+          <option value="trainer">Trainers</option>
+          <option value="owner">Owners</option>
+          <option value="horse">Horses</option>
+          <option value="sire">Sires</option>
+        </select>
+        <span style="color:var(--text-muted); font-size:13px;">from</span>
+        <input type="number" class="form-input" id="lbYearFrom" value="1967" style="width:88px;">
+        <span style="color:var(--text-muted); font-size:13px;">to</span>
+        <input type="number" class="form-input" id="lbYearTo" value="2026" style="width:88px;">
+        <button class="btn btn-sm btn-primary" onclick="archiveLoadLeaders()">Update</button>
+        <span style="color:var(--text-muted); font-size:12px;">minimum 5 starts</span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="data-table" id="lbTable" style="width:100%;">
+          <thead><tr id="lbThead"></tr></thead>
+          <tbody id="lbTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==================== STANDINGS PAGE ==================== -->
+<div class="page" id="page-standings">
+  <div class="page-content">
+    <h1 class="page-title">Standings</h1>
+    <p class="page-subtitle">Season rankings by organization</p>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="filter-bar">
+          <div class="form-group">
+            <label class="form-label">Organization</label>
+            <select class="form-select">
+              <option>Virginia Point to Point Foundation</option>
+              <option>Maryland Governor's Cup Series</option>
+              <option>Virginia Steeplechase Association</option>
+              <option>American Sanctioned &amp; Non-Sanctioned Winners</option>
+              <option>Virginia Sanctioned &amp; Non-Sanctioned Winners</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select class="form-select">
+              <option>Horse</option>
+              <option>Rider</option>
+              <option>Owner</option>
+              <option>Trainer</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Year</label>
+            <select class="form-select">
+              <option>2026</option>
+              <option>2025</option>
+              <option>2024</option>
+              <option>2023</option>
+            </select>
+          </div>
+          <div class="form-group" style="align-self: end;">
+            <button class="btn btn-primary" onclick="generateStandings()">Generate</button>
+          </div>
+        </div>
+
+        <div id="standingsResults" class="hidden">
+          <div style="overflow-x: auto;">
+            <table class="data-table">
+              <thead>
+                <tr><th>Rank</th><th>Horse</th><th>Starts</th><th>1st</th><th>2nd</th><th>3rd</th><th>Points</th><th>Earnings</th></tr>
+              </thead>
+              <tbody>
+                <tr><td style="font-weight:700;">1</td><td class="meet-name">AMERICAN FARMER</td><td>6</td><td>3</td><td>1</td><td>1</td><td>42</td><td>$8,500</td></tr>
+                <tr><td style="font-weight:700;">2</td><td class="meet-name">BOURBON COURAGE</td><td>5</td><td>2</td><td>2</td><td>0</td><td>34</td><td>$7,200</td></tr>
+                <tr><td style="font-weight:700;">3</td><td class="meet-name">BELLE CHASSE</td><td>5</td><td>2</td><td>1</td><td>1</td><td>31</td><td>$6,000</td></tr>
+                <tr><td style="font-weight:700;">4</td><td class="meet-name">CHABLIS</td><td>4</td><td>2</td><td>0</td><td>1</td><td>26</td><td>$5,100</td></tr>
+                <tr><td style="font-weight:700;">5</td><td class="meet-name">ALAR MIST</td><td>6</td><td>1</td><td>2</td><td>2</td><td>24</td><td>$4,800</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ADMIN / RESULTS UPLOAD PAGE ==================== -->
+<div class="page" id="page-admin">
+  <!-- Auth gate (shown when not logged in as admin) -->
+  <div class="page-content" id="adminAuthGate">
+    <div class="auth-gate">
+      <div class="auth-gate-icon">&#128274;</div>
+      <h3>Administrator Access Required</h3>
+      <p>The Results Admin portal is only available to authorized staff. Log in with an admin account to upload and manage race results.</p>
+      <button class="btn btn-primary btn-lg" onclick="openLogin()">Log In as Admin</button>
+    </div>
+  </div>
+  <!-- Admin content (shown when logged in as admin) -->
+  <div class="page-content hidden" id="adminContent">
+    <h1 class="page-title">Results Admin</h1>
+    <p class="page-subtitle">Upload race results or enter them manually — works offline at remote venues</p>
+
+    <!-- Sync status -->
+    <div class="sync-status" id="syncStatus">
+      <div class="sync-dot synced"></div>
+      <span><strong>All synced</strong> — 0 results pending upload</span>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchAdminTab(this, 'upload')">Upload CSV/XLS</button>
+      <button class="tab-btn" onclick="switchAdminTab(this, 'manual')">Manual Entry</button>
+      <button class="tab-btn" onclick="switchAdminTab(this, 'pending')">Pending Sync</button>
+    </div>
+
+    <!-- Upload tab -->
+    <div id="adminUpload">
+      <div class="card">
+        <div class="card-body">
+          <h3 style="font-family: var(--font-serif); color: var(--racing-green-dark); margin-bottom: 8px;">Upload Race Results</h3>
+          <p class="text-muted mb-16" style="font-size: 14px;">Upload a CSV or Excel file with race results. The file should have columns for: Finish Order, Horse Name, Weight, Rider, Owner, Trainer, and Purse Earned.</p>
+
+          <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-zone-icon">&#128196;</div>
+            <div class="upload-zone-text">Drop your file here or tap to browse</div>
+            <div class="upload-zone-hint">Accepts .csv, .xls, .xlsx &middot; Max 5MB</div>
+          </div>
+          <input type="file" id="fileInput" accept=".csv,.xls,.xlsx" style="display:none" onchange="handleFileUpload(this)">
+
+          <div id="uploadPreview" class="hidden">
+            <div class="flex-between mt-24 mb-16">
+              <h3 style="font-family: var(--font-serif); color: var(--racing-green-dark);">Preview</h3>
+              <div>
+                <button class="btn btn-sm btn-secondary" onclick="clearUpload()">Clear</button>
+                <button class="btn btn-sm btn-primary" onclick="confirmUpload()" style="margin-left: 8px;">Import Results</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Meet</label>
+              <select class="form-select" id="uploadMeetSelect">
+                <option value="">Select meet for these results...</option>
+                <option>Potomac Hunt Races — May 17, 2026</option>
+                <option>Radnor Hunt Races — May 16, 2026</option>
+                <option>Loudoun Fairfax Hunt Hunter Pace — May 3, 2026</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Race</label>
+              <select class="form-select">
+                <option value="">Select race...</option>
+                <option>1st Race — Maiden Timber</option>
+                <option>2nd Race — Allowance Timber</option>
+                <option>3rd Race — Open Flat</option>
+              </select>
+            </div>
+
+            <div class="results-preview">
+              <table>
+                <thead>
+                  <tr><th>Fin</th><th>Horse</th><th>Wgt</th><th>Rider</th><th>Owner</th><th>Trainer</th><th>Purse</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td>AMERICAN FARMER</td><td>165</td><td>Walsh, G.</td><td>Timber Creek Farm</td><td>Walsh, G.</td><td>$2,500</td></tr>
+                  <tr><td>2</td><td>BOURBON COURAGE</td><td>160</td><td>Dowling, P.</td><td>Riverdee Stable</td><td>Voss, T.</td><td>$1,000</td></tr>
+                  <tr><td>3</td><td>BELLE CHASSE</td><td>155</td><td>Hendriks, R.</td><td>Ashland Stables</td><td>Fisher, J.</td><td>$500</td></tr>
+                  <tr><td>4</td><td>CHABLIS</td><td>160</td><td>Rafter, C.</td><td>Whitewood Stable</td><td>McKenna, K.</td><td>—</td></tr>
+                  <tr><td>PU</td><td>ALAR MIST</td><td>155</td><td>Young, S.</td><td>Dodon Farm</td><td>Young, S.</td><td>—</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="grid-2 mt-16">
+              <div class="form-group">
+                <label class="form-label">Winning Margin</label>
+                <input type="text" class="form-input" placeholder="e.g. 3 lengths">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Winning Time</label>
+                <input type="text" class="form-input" placeholder="e.g. 6:12">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Turf Condition</label>
+                <select class="form-select">
+                  <option>Good</option>
+                  <option>Firm</option>
+                  <option>Yielding</option>
+                  <option>Soft</option>
+                  <option>Heavy</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Distance</label>
+                <input type="text" class="form-input" placeholder="e.g. 3 Miles">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manual entry tab -->
+    <div id="adminManual" class="hidden">
+      <div class="card">
+        <div class="card-body">
+          <h3 style="font-family: var(--font-serif); color: var(--racing-green-dark); margin-bottom: 8px;">Manual Results Entry</h3>
+          <p class="text-muted mb-16" style="font-size: 14px;">Enter results directly — perfect for trackside use at venues without internet. Results are saved to your device and synced automatically when you reconnect.</p>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Meet</label>
+              <select class="form-select">
+                <option value="">Select meet...</option>
+                <option>Potomac Hunt Races — May 17, 2026</option>
+                <option>Radnor Hunt Races — May 16, 2026</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Race #</label>
+              <select class="form-select">
+                <option value="">Race...</option>
+                <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Race Name / Type</label>
+            <input type="text" class="form-input" placeholder="e.g. Maiden Timber, 3 Miles, Purse $2,000">
+          </div>
+
+          <h4 style="font-family: var(--font-serif); color: var(--racing-green-dark); margin: 20px 0 12px;">Entries</h4>
+
+          <div id="manualEntries">
+            <div class="manual-entry-row" style="background: var(--cream); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 10px;">
+              <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+                <strong style="font-size: 14px; min-width: 20px;">1.</strong>
+                <input type="text" class="form-input" placeholder="Horse name" style="flex: 2;">
+                <input type="number" class="form-input" placeholder="Wgt" style="flex: 0.5; min-width: 60px;">
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <input type="text" class="form-input" placeholder="Rider" style="flex: 1;">
+                <input type="text" class="form-input" placeholder="Owner" style="flex: 1;">
+                <input type="text" class="form-input" placeholder="Trainer" style="flex: 1;">
+              </div>
+            </div>
+            <div class="manual-entry-row" style="background: var(--cream); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 10px;">
+              <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+                <strong style="font-size: 14px; min-width: 20px;">2.</strong>
+                <input type="text" class="form-input" placeholder="Horse name" style="flex: 2;">
+                <input type="number" class="form-input" placeholder="Wgt" style="flex: 0.5; min-width: 60px;">
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <input type="text" class="form-input" placeholder="Rider" style="flex: 1;">
+                <input type="text" class="form-input" placeholder="Owner" style="flex: 1;">
+                <input type="text" class="form-input" placeholder="Trainer" style="flex: 1;">
+              </div>
+            </div>
+            <div class="manual-entry-row" style="background: var(--cream); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 10px;">
+              <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+                <strong style="font-size: 14px; min-width: 20px;">3.</strong>
+                <input type="text" class="form-input" placeholder="Horse name" style="flex: 2;">
+                <input type="number" class="form-input" placeholder="Wgt" style="flex: 0.5; min-width: 60px;">
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <input type="text" class="form-input" placeholder="Rider" style="flex: 1;">
+                <input type="text" class="form-input" placeholder="Owner" style="flex: 1;">
+                <input type="text" class="form-input" placeholder="Trainer" style="flex: 1;">
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-secondary btn-sm mt-8" onclick="addManualEntry()">+ Add Entry</button>
+
+          <div class="grid-2 mt-16">
+            <div class="form-group">
+              <label class="form-label">Winning Margin</label>
+              <input type="text" class="form-input" placeholder="e.g. 3 lengths">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Winning Time</label>
+              <input type="text" class="form-input" placeholder="e.g. 6:12">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Turf Condition</label>
+              <select class="form-select">
+                <option>Good</option><option>Firm</option><option>Yielding</option><option>Soft</option><option>Heavy</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Distance</label>
+              <input type="text" class="form-input" placeholder="e.g. 3 Miles">
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; margin-top: 24px;">
+            <button class="btn btn-secondary btn-lg" style="flex: 1;" onclick="saveLocalDraft()">Save Draft</button>
+            <button class="btn btn-gold btn-lg" style="flex: 2;" onclick="saveAndSync()">Save &amp; Sync</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending sync tab -->
+    <div id="adminPending" class="hidden">
+      <div class="card">
+        <div class="card-body text-center" id="pendingEmpty">
+          <div style="padding: 32px; color: var(--text-muted);">
+            <div style="font-size: 48px; margin-bottom: 12px; opacity: 0.5;">&#9989;</div>
+            <h3 style="font-family: var(--font-serif); color: var(--racing-green-dark); margin-bottom: 8px;">All caught up</h3>
+            <p style="font-size: 14px;">No results pending sync. When you enter results offline, they'll appear here until they're uploaded.</p>
+          </div>
+        </div>
+        <div class="card-body hidden" id="pendingList">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px; background: #fff8e1; border-radius: var(--radius-sm); margin-bottom: 10px;">
+            <div>
+              <div style="font-weight: 600;">Warrenton Hunt — Race 3</div>
+              <div style="font-size: 13px; color: var(--text-secondary);">5 entries &middot; Saved 2 hours ago</div>
+            </div>
+            <button class="btn btn-sm btn-primary">Sync Now</button>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px; background: #fff8e1; border-radius: var(--radius-sm);">
+            <div>
+              <div style="font-weight: 600;">Warrenton Hunt — Race 4</div>
+              <div style="font-size: 13px; color: var(--text-secondary);">7 entries &middot; Saved 1 hour ago</div>
+            </div>
+            <button class="btn btn-sm btn-primary">Sync Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- ==================== PROFILE PAGE ==================== -->
+<div class="page" id="page-profile">
+  <div class="page-content">
+    <h1 class="page-title">My Profile</h1>
+    <p class="page-subtitle">Manage your account and saved information</p>
+
+    <div id="profileNotLoggedIn">
+      <div class="auth-gate">
+        <div class="auth-gate-icon">&#128100;</div>
+        <h3>Log In to View Your Profile</h3>
+        <p>Create an account or log in to save your horses, prefill entries, and track your race history.</p>
+        <button class="btn btn-primary btn-lg" onclick="openLogin()">Log In / Sign Up</button>
+      </div>
+    </div>
+
+    <div id="profileLoggedIn" class="hidden">
+      <!-- Account info -->
+      <div class="profile-section">
+        <h3>Account Information</h3>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-input" id="profileName" value="Zach Miller">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" id="profileEmail" value="zach@timbercreekfarm.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone</label>
+            <input type="tel" class="form-input" id="profilePhone" value="(540) 555-0192">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Role</label>
+            <input type="text" class="form-input" id="profileRoleDisplay" value="Trainer" disabled style="background: var(--cream);">
+          </div>
+        </div>
+      </div>
+
+      <!-- Default owner/trainer (auto-fills entries) -->
+      <div class="profile-section">
+        <h3>Default Entry Info</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;">These fields will be pre-filled when you submit an entry, so you don't have to type them each time.</p>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Default Owner</label>
+            <input type="text" class="form-input" id="profileOwner" value="Timber Creek Farm">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Default Trainer</label>
+            <input type="text" class="form-input" id="profileTrainer" value="Walsh, G.">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Silks / Colors</label>
+            <input type="text" class="form-input" id="profileColors" value="Green, gold sash, green cap">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Preferred Weight</label>
+            <input type="number" class="form-input" id="profileWeight" value="165">
+          </div>
+        </div>
+        <button class="btn btn-primary mt-8" onclick="saveProfile()">Save Changes</button>
+      </div>
+
+      <!-- My Horses roster -->
+      <div class="profile-section">
+        <div class="flex-between" style="margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border-light);">
+          <h3 style="border: none; padding: 0; margin: 0;">My Horses</h3>
+          <button class="btn btn-sm btn-secondary" onclick="addHorseToRoster()">+ Add Horse</button>
+        </div>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;">Saved horses appear as quick-select options when entering races.</p>
+        <div id="horseRoster">
+          <div class="horse-roster-item">
+            <div>
+              <div class="saved-horse-name">AMERICAN FARMER</div>
+              <div class="saved-horse-detail">b. g. 2017, by Gio Ponti &middot; Last run: May 17, 2026</div>
+            </div>
+            <button class="btn btn-sm btn-secondary">Edit</button>
+          </div>
+          <div class="horse-roster-item">
+            <div>
+              <div class="saved-horse-name">BOURBON COURAGE</div>
+              <div class="saved-horse-detail">ch. g. 2018, by Curlin &middot; Last run: Apr 11, 2026</div>
+            </div>
+            <button class="btn btn-sm btn-secondary">Edit</button>
+          </div>
+          <div class="horse-roster-item">
+            <div>
+              <div class="saved-horse-name">CHABLIS</div>
+              <div class="saved-horse-detail">b. m. 2019, by Blame &middot; Last run: Mar 21, 2026</div>
+            </div>
+            <button class="btn btn-sm btn-secondary">Edit</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Entry history -->
+      <div class="profile-section">
+        <h3>Recent Entries</h3>
+        <div style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr><th>Date</th><th>Meet</th><th>Horse</th><th>Race</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>May 17</td><td>Potomac Hunt</td><td>AMERICAN FARMER</td><td>Allowance Timber</td><td><span class="badge badge-results">Finished</span></td></tr>
+              <tr><td>Apr 26</td><td>Middleburg</td><td>AMERICAN FARMER</td><td>Open Timber</td><td><span class="badge badge-results">Finished</span></td></tr>
+              <tr><td>Apr 11</td><td>Blue Ridge</td><td>BOURBON COURAGE</td><td>Maiden Timber</td><td><span class="badge badge-results">Finished</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== LOGIN MODAL ==================== -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Log In</h2>
+      <button class="modal-close" onclick="closeLogin()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <!-- Step 1: Role selection -->
+      <div id="loginStep1">
+        <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">How will you be using Central Entry Office?</p>
+        <div class="role-option" onclick="selectRole(this, 'trainer')">
+          <div class="role-icon">&#127943;</div>
+          <div>
+            <div class="role-title">Trainer / Owner</div>
+            <div class="role-desc">Enter horses, view results, track your stable</div>
+          </div>
+        </div>
+        <div class="role-option" onclick="selectRole(this, 'admin')">
+          <div class="role-icon">&#128274;</div>
+          <div>
+            <div class="role-title">Race Official / Admin</div>
+            <div class="role-desc">Upload results, manage meets, administer data</div>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-block btn-lg mt-24" onclick="goToLoginStep2()" id="loginContinueBtn" disabled>Continue</button>
+      </div>
+      <!-- Step 2: Credentials -->
+      <div id="loginStep2" class="hidden">
+        <div id="loginRoleBadge" style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: var(--cream); border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--racing-green); margin-bottom: 16px;">
+          <span id="loginRoleIcon">&#127943;</span> <span id="loginRoleText">Trainer / Owner</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" id="loginEmail" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" id="loginPassword" placeholder="Enter your password">
+        </div>
+        <button class="btn btn-primary btn-block btn-lg" onclick="doLogin()">Log In</button>
+        <div class="modal-divider">or</div>
+        <button class="btn btn-secondary btn-block" onclick="doLogin()" style="gap: 10px;">
+          <span style="font-size: 18px;">&#9993;</span> Sign up with email
+        </button>
+        <p style="font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 16px;">
+          Demo mode: click Log In with any email to see the experience.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== FOOTER ==================== -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div style="font-family: var(--font-serif); font-size: 16px; color: white; margin-bottom: 8px;">Central Entry Office</div>
+      <div>Steeplechase &amp; Point-to-Point Racing</div>
+      <div style="margin-top: 8px;">&copy; 2007&ndash;2026 Central Entry Office. All rights reserved.</div>
+    </div>
+    <div class="footer-contact">
+      <strong style="color: white;">Contact</strong><br>
+      Alissa Norman &middot; TGSF<br>
+      400 Fair Hill Drive, Elkton, MD 21921<br>
+      <a href="tel:4848970096">(484) 897-0096</a><br>
+      <a href="mailto:alissa@centralentryoffice.com">alissa@centralentryoffice.com</a>
+    </div>
+    <div>
+      <strong style="color: white;">Quick Links</strong><br>
+      <a href="#">Race Calendar</a><br>
+      <a href="#">Condition Books</a><br>
+      <a href="#">VA Steeplechase HOF</a><br>
+      <a href="https://nationalsteeplechase.com" target="_blank">National Steeplechase Assn.</a>
+    </div>
+  </div>
+</footer>
+
+<script>/* pako 2.1.0 inflate (MIT) - fallback where DecompressionStream is missing */
+/*! pako 2.1.0 https://github.com/nodeca/pako @license (MIT AND Zlib) */
+!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?t(exports):"function"==typeof define&&define.amd?define(["exports"],t):t((e="undefined"!=typeof globalThis?globalThis:e||self).pako={})}(this,(function(e){"use strict";var t=function(e,t,i,n){for(var a=65535&e|0,r=e>>>16&65535|0,o=0;0!==i;){i-=o=i>2e3?2e3:i;do{r=r+(a=a+t[n++]|0)|0}while(--o);a%=65521,r%=65521}return a|r<<16|0},i=new Uint32Array(function(){for(var e,t=[],i=0;i<256;i++){e=i;for(var n=0;n<8;n++)e=1&e?3988292384^e>>>1:e>>>1;t[i]=e}return t}()),n=function(e,t,n,a){var r=i,o=a+n;e^=-1;for(var s=a;s<o;s++)e=e>>>8^r[255&(e^t[s])];return-1^e},a=16209,r=function(e,t){var i,n,r,o,s,l,f,d,h,c,u,w,b,m,k,_,v,g,p,y,x,E,R,A,Z=e.state;i=e.next_in,R=e.input,n=i+(e.avail_in-5),r=e.next_out,A=e.output,o=r-(t-e.avail_out),s=r+(e.avail_out-257),l=Z.dmax,f=Z.wsize,d=Z.whave,h=Z.wnext,c=Z.window,u=Z.hold,w=Z.bits,b=Z.lencode,m=Z.distcode,k=(1<<Z.lenbits)-1,_=(1<<Z.distbits)-1;e:do{w<15&&(u+=R[i++]<<w,w+=8,u+=R[i++]<<w,w+=8),v=b[u&k];t:for(;;){if(u>>>=g=v>>>24,w-=g,0===(g=v>>>16&255))A[r++]=65535&v;else{if(!(16&g)){if(0==(64&g)){v=b[(65535&v)+(u&(1<<g)-1)];continue t}if(32&g){Z.mode=16191;break e}e.msg="invalid literal/length code",Z.mode=a;break e}p=65535&v,(g&=15)&&(w<g&&(u+=R[i++]<<w,w+=8),p+=u&(1<<g)-1,u>>>=g,w-=g),w<15&&(u+=R[i++]<<w,w+=8,u+=R[i++]<<w,w+=8),v=m[u&_];i:for(;;){if(u>>>=g=v>>>24,w-=g,!(16&(g=v>>>16&255))){if(0==(64&g)){v=m[(65535&v)+(u&(1<<g)-1)];continue i}e.msg="invalid distance code",Z.mode=a;break e}if(y=65535&v,w<(g&=15)&&(u+=R[i++]<<w,(w+=8)<g&&(u+=R[i++]<<w,w+=8)),(y+=u&(1<<g)-1)>l){e.msg="invalid distance too far back",Z.mode=a;break e}if(u>>>=g,w-=g,y>(g=r-o)){if((g=y-g)>d&&Z.sane){e.msg="invalid distance too far back",Z.mode=a;break e}if(x=0,E=c,0===h){if(x+=f-g,g<p){p-=g;do{A[r++]=c[x++]}while(--g);x=r-y,E=A}}else if(h<g){if(x+=f+h-g,(g-=h)<p){p-=g;do{A[r++]=c[x++]}while(--g);if(x=0,h<p){p-=g=h;do{A[r++]=c[x++]}while(--g);x=r-y,E=A}}}else if(x+=h-g,g<p){p-=g;do{A[r++]=c[x++]}while(--g);x=r-y,E=A}for(;p>2;)A[r++]=E[x++],A[r++]=E[x++],A[r++]=E[x++],p-=3;p&&(A[r++]=E[x++],p>1&&(A[r++]=E[x++]))}else{x=r-y;do{A[r++]=A[x++],A[r++]=A[x++],A[r++]=A[x++],p-=3}while(p>2);p&&(A[r++]=A[x++],p>1&&(A[r++]=A[x++]))}break}}break}}while(i<n&&r<s);i-=p=w>>3,u&=(1<<(w-=p<<3))-1,e.next_in=i,e.next_out=r,e.avail_in=i<n?n-i+5:5-(i-n),e.avail_out=r<s?s-r+257:257-(r-s),Z.hold=u,Z.bits=w},o=15,s=new Uint16Array([3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258,0,0]),l=new Uint8Array([16,16,16,16,16,16,16,16,17,17,17,17,18,18,18,18,19,19,19,19,20,20,20,20,21,21,21,21,16,72,78]),f=new Uint16Array([1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577,0,0]),d=new Uint8Array([16,16,16,16,17,17,18,18,19,19,20,20,21,21,22,22,23,23,24,24,25,25,26,26,27,27,28,28,29,29,64,64]),h=function(e,t,i,n,a,r,h,c){var u,w,b,m,k,_,v,g,p,y=c.bits,x=0,E=0,R=0,A=0,Z=0,S=0,T=0,O=0,U=0,D=0,I=null,B=new Uint16Array(16),N=new Uint16Array(16),C=null;for(x=0;x<=o;x++)B[x]=0;for(E=0;E<n;E++)B[t[i+E]]++;for(Z=y,A=o;A>=1&&0===B[A];A--);if(Z>A&&(Z=A),0===A)return a[r++]=20971520,a[r++]=20971520,c.bits=1,0;for(R=1;R<A&&0===B[R];R++);for(Z<R&&(Z=R),O=1,x=1;x<=o;x++)if(O<<=1,(O-=B[x])<0)return-1;if(O>0&&(0===e||1!==A))return-1;for(N[1]=0,x=1;x<o;x++)N[x+1]=N[x]+B[x];for(E=0;E<n;E++)0!==t[i+E]&&(h[N[t[i+E]]++]=E);if(0===e?(I=C=h,_=20):1===e?(I=s,C=l,_=257):(I=f,C=d,_=0),D=0,E=0,x=R,k=r,S=Z,T=0,b=-1,m=(U=1<<Z)-1,1===e&&U>852||2===e&&U>592)return 1;for(;;){v=x-T,h[E]+1<_?(g=0,p=h[E]):h[E]>=_?(g=C[h[E]-_],p=I[h[E]-_]):(g=96,p=0),u=1<<x-T,R=w=1<<S;do{a[k+(D>>T)+(w-=u)]=v<<24|g<<16|p|0}while(0!==w);for(u=1<<x-1;D&u;)u>>=1;if(0!==u?(D&=u-1,D+=u):D=0,E++,0==--B[x]){if(x===A)break;x=t[i+h[E]]}if(x>Z&&(D&m)!==b){for(0===T&&(T=Z),k+=R,O=1<<(S=x-T);S+T<A&&!((O-=B[S+T])<=0);)S++,O<<=1;if(U+=1<<S,1===e&&U>852||2===e&&U>592)return 1;a[b=D&m]=Z<<24|S<<16|k-r|0}}return 0!==D&&(a[k+D]=x-T<<24|64<<16|0),c.bits=Z,0},c={Z_NO_FLUSH:0,Z_PARTIAL_FLUSH:1,Z_SYNC_FLUSH:2,Z_FULL_FLUSH:3,Z_FINISH:4,Z_BLOCK:5,Z_TREES:6,Z_OK:0,Z_STREAM_END:1,Z_NEED_DICT:2,Z_ERRNO:-1,Z_STREAM_ERROR:-2,Z_DATA_ERROR:-3,Z_MEM_ERROR:-4,Z_BUF_ERROR:-5,Z_NO_COMPRESSION:0,Z_BEST_SPEED:1,Z_BEST_COMPRESSION:9,Z_DEFAULT_COMPRESSION:-1,Z_FILTERED:1,Z_HUFFMAN_ONLY:2,Z_RLE:3,Z_FIXED:4,Z_DEFAULT_STRATEGY:0,Z_BINARY:0,Z_TEXT:1,Z_UNKNOWN:2,Z_DEFLATED:8},u=c.Z_FINISH,w=c.Z_BLOCK,b=c.Z_TREES,m=c.Z_OK,k=c.Z_STREAM_END,_=c.Z_NEED_DICT,v=c.Z_STREAM_ERROR,g=c.Z_DATA_ERROR,p=c.Z_MEM_ERROR,y=c.Z_BUF_ERROR,x=c.Z_DEFLATED,E=16180,R=16190,A=16191,Z=16192,S=16194,T=16199,O=16200,U=16206,D=16209,I=function(e){return(e>>>24&255)+(e>>>8&65280)+((65280&e)<<8)+((255&e)<<24)};function B(){this.strm=null,this.mode=0,this.last=!1,this.wrap=0,this.havedict=!1,this.flags=0,this.dmax=0,this.check=0,this.total=0,this.head=null,this.wbits=0,this.wsize=0,this.whave=0,this.wnext=0,this.window=null,this.hold=0,this.bits=0,this.length=0,this.offset=0,this.extra=0,this.lencode=null,this.distcode=null,this.lenbits=0,this.distbits=0,this.ncode=0,this.nlen=0,this.ndist=0,this.have=0,this.next=null,this.lens=new Uint16Array(320),this.work=new Uint16Array(288),this.lendyn=null,this.distdyn=null,this.sane=0,this.back=0,this.was=0}var N,C,z=function(e){if(!e)return 1;var t=e.state;return!t||t.strm!==e||t.mode<E||t.mode>16211?1:0},F=function(e){if(z(e))return v;var t=e.state;return e.total_in=e.total_out=t.total=0,e.msg="",t.wrap&&(e.adler=1&t.wrap),t.mode=E,t.last=0,t.havedict=0,t.flags=-1,t.dmax=32768,t.head=null,t.hold=0,t.bits=0,t.lencode=t.lendyn=new Int32Array(852),t.distcode=t.distdyn=new Int32Array(592),t.sane=1,t.back=-1,m},L=function(e){if(z(e))return v;var t=e.state;return t.wsize=0,t.whave=0,t.wnext=0,F(e)},M=function(e,t){var i;if(z(e))return v;var n=e.state;return t<0?(i=0,t=-t):(i=5+(t>>4),t<48&&(t&=15)),t&&(t<8||t>15)?v:(null!==n.window&&n.wbits!==t&&(n.window=null),n.wrap=i,n.wbits=t,L(e))},H=function(e,t){if(!e)return v;var i=new B;e.state=i,i.strm=e,i.window=null,i.mode=E;var n=M(e,t);return n!==m&&(e.state=null),n},j=!0,K=function(e){if(j){N=new Int32Array(512),C=new Int32Array(32);for(var t=0;t<144;)e.lens[t++]=8;for(;t<256;)e.lens[t++]=9;for(;t<280;)e.lens[t++]=7;for(;t<288;)e.lens[t++]=8;for(h(1,e.lens,0,288,N,0,e.work,{bits:9}),t=0;t<32;)e.lens[t++]=5;h(2,e.lens,0,32,C,0,e.work,{bits:5}),j=!1}e.lencode=N,e.lenbits=9,e.distcode=C,e.distbits=5},P=function(e,t,i,n){var a,r=e.state;return null===r.window&&(r.wsize=1<<r.wbits,r.wnext=0,r.whave=0,r.window=new Uint8Array(r.wsize)),n>=r.wsize?(r.window.set(t.subarray(i-r.wsize,i),0),r.wnext=0,r.whave=r.wsize):((a=r.wsize-r.wnext)>n&&(a=n),r.window.set(t.subarray(i-n,i-n+a),r.wnext),(n-=a)?(r.window.set(t.subarray(i-n,i),0),r.wnext=n,r.whave=r.wsize):(r.wnext+=a,r.wnext===r.wsize&&(r.wnext=0),r.whave<r.wsize&&(r.whave+=a))),0},Y={inflateReset:L,inflateReset2:M,inflateResetKeep:F,inflateInit:function(e){return H(e,15)},inflateInit2:H,inflate:function(e,i){var a,o,s,l,f,d,c,B,N,C,F,L,M,H,j,Y,G,X,W,q,J,Q,V,$,ee=0,te=new Uint8Array(4),ie=new Uint8Array([16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15]);if(z(e)||!e.output||!e.input&&0!==e.avail_in)return v;(a=e.state).mode===A&&(a.mode=Z),f=e.next_out,s=e.output,c=e.avail_out,l=e.next_in,o=e.input,d=e.avail_in,B=a.hold,N=a.bits,C=d,F=c,Q=m;e:for(;;)switch(a.mode){case E:if(0===a.wrap){a.mode=Z;break}for(;N<16;){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}if(2&a.wrap&&35615===B){0===a.wbits&&(a.wbits=15),a.check=0,te[0]=255&B,te[1]=B>>>8&255,a.check=n(a.check,te,2,0),B=0,N=0,a.mode=16181;break}if(a.head&&(a.head.done=!1),!(1&a.wrap)||(((255&B)<<8)+(B>>8))%31){e.msg="incorrect header check",a.mode=D;break}if((15&B)!==x){e.msg="unknown compression method",a.mode=D;break}if(N-=4,J=8+(15&(B>>>=4)),0===a.wbits&&(a.wbits=J),J>15||J>a.wbits){e.msg="invalid window size",a.mode=D;break}a.dmax=1<<a.wbits,a.flags=0,e.adler=a.check=1,a.mode=512&B?16189:A,B=0,N=0;break;case 16181:for(;N<16;){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}if(a.flags=B,(255&a.flags)!==x){e.msg="unknown compression method",a.mode=D;break}if(57344&a.flags){e.msg="unknown header flags set",a.mode=D;break}a.head&&(a.head.text=B>>8&1),512&a.flags&&4&a.wrap&&(te[0]=255&B,te[1]=B>>>8&255,a.check=n(a.check,te,2,0)),B=0,N=0,a.mode=16182;case 16182:for(;N<32;){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}a.head&&(a.head.time=B),512&a.flags&&4&a.wrap&&(te[0]=255&B,te[1]=B>>>8&255,te[2]=B>>>16&255,te[3]=B>>>24&255,a.check=n(a.check,te,4,0)),B=0,N=0,a.mode=16183;case 16183:for(;N<16;){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}a.head&&(a.head.xflags=255&B,a.head.os=B>>8),512&a.flags&&4&a.wrap&&(te[0]=255&B,te[1]=B>>>8&255,a.check=n(a.check,te,2,0)),B=0,N=0,a.mode=16184;case 16184:if(1024&a.flags){for(;N<16;){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}a.length=B,a.head&&(a.head.extra_len=B),512&a.flags&&4&a.wrap&&(te[0]=255&B,te[1]=B>>>8&255,a.check=n(a.check,te,2,0)),B=0,N=0}else a.head&&(a.head.extra=null);a.mode=16185;case 16185:if(1024&a.flags&&((L=a.length)>d&&(L=d),L&&(a.head&&(J=a.head.extra_len-a.length,a.head.extra||(a.head.extra=new Uint8Array(a.head.extra_len)),a.head.extra.set(o.subarray(l,l+L),J)),512&a.flags&&4&a.wrap&&(a.check=n(a.check,o,L,l)),d-=L,l+=L,a.length-=L),a.length))break e;a.length=0,a.mode=16186;case 16186:if(2048&a.flags){if(0===d)break e;L=0;do{J=o[l+L++],a.head&&J&&a.length<65536&&(a.head.name+=String.fromCharCode(J))}while(J&&L<d);if(512&a.flags&&4&a.wrap&&(a.check=n(a.check,o,L,l)),d-=L,l+=L,J)break e}else a.head&&(a.head.name=null);a.length=0,a.mode=16187;case 16187:if(4096&a.flags){if(0===d)break e;L=0;do{J=o[l+L++],a.head&&J&&a.length<65536&&(a.head.comment+=String.fromCharCode(J))}while(J&&L<d);if(512&a.flags&&4&a.wrap&&(a.check=n(a.check,o,L,l)),d-=L,l+=L,J)break e}else a.head&&(a.head.comment=null);a.mode=16188;case 16188:if(512&a.flags){for(;N<16;){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}if(4&a.wrap&&B!==(65535&a.check)){e.msg="header crc mismatch",a.mode=D;break}B=0,N=0}a.head&&(a.head.hcrc=a.flags>>9&1,a.head.done=!0),e.adler=a.check=0,a.mode=A;break;case 16189:for(;N<32;){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}e.adler=a.check=I(B),B=0,N=0,a.mode=R;case R:if(0===a.havedict)return e.next_out=f,e.avail_out=c,e.next_in=l,e.avail_in=d,a.hold=B,a.bits=N,_;e.adler=a.check=1,a.mode=A;case A:if(i===w||i===b)break e;case Z:if(a.last){B>>>=7&N,N-=7&N,a.mode=U;break}for(;N<3;){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}switch(a.last=1&B,N-=1,3&(B>>>=1)){case 0:a.mode=16193;break;case 1:if(K(a),a.mode=T,i===b){B>>>=2,N-=2;break e}break;case 2:a.mode=16196;break;case 3:e.msg="invalid block type",a.mode=D}B>>>=2,N-=2;break;case 16193:for(B>>>=7&N,N-=7&N;N<32;){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}if((65535&B)!=(B>>>16^65535)){e.msg="invalid stored block lengths",a.mode=D;break}if(a.length=65535&B,B=0,N=0,a.mode=S,i===b)break e;case S:a.mode=16195;case 16195:if(L=a.length){if(L>d&&(L=d),L>c&&(L=c),0===L)break e;s.set(o.subarray(l,l+L),f),d-=L,l+=L,c-=L,f+=L,a.length-=L;break}a.mode=A;break;case 16196:for(;N<14;){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}if(a.nlen=257+(31&B),B>>>=5,N-=5,a.ndist=1+(31&B),B>>>=5,N-=5,a.ncode=4+(15&B),B>>>=4,N-=4,a.nlen>286||a.ndist>30){e.msg="too many length or distance symbols",a.mode=D;break}a.have=0,a.mode=16197;case 16197:for(;a.have<a.ncode;){for(;N<3;){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}a.lens[ie[a.have++]]=7&B,B>>>=3,N-=3}for(;a.have<19;)a.lens[ie[a.have++]]=0;if(a.lencode=a.lendyn,a.lenbits=7,V={bits:a.lenbits},Q=h(0,a.lens,0,19,a.lencode,0,a.work,V),a.lenbits=V.bits,Q){e.msg="invalid code lengths set",a.mode=D;break}a.have=0,a.mode=16198;case 16198:for(;a.have<a.nlen+a.ndist;){for(;Y=(ee=a.lencode[B&(1<<a.lenbits)-1])>>>16&255,G=65535&ee,!((j=ee>>>24)<=N);){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}if(G<16)B>>>=j,N-=j,a.lens[a.have++]=G;else{if(16===G){for($=j+2;N<$;){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}if(B>>>=j,N-=j,0===a.have){e.msg="invalid bit length repeat",a.mode=D;break}J=a.lens[a.have-1],L=3+(3&B),B>>>=2,N-=2}else if(17===G){for($=j+3;N<$;){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}N-=j,J=0,L=3+(7&(B>>>=j)),B>>>=3,N-=3}else{for($=j+7;N<$;){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}N-=j,J=0,L=11+(127&(B>>>=j)),B>>>=7,N-=7}if(a.have+L>a.nlen+a.ndist){e.msg="invalid bit length repeat",a.mode=D;break}for(;L--;)a.lens[a.have++]=J}}if(a.mode===D)break;if(0===a.lens[256]){e.msg="invalid code -- missing end-of-block",a.mode=D;break}if(a.lenbits=9,V={bits:a.lenbits},Q=h(1,a.lens,0,a.nlen,a.lencode,0,a.work,V),a.lenbits=V.bits,Q){e.msg="invalid literal/lengths set",a.mode=D;break}if(a.distbits=6,a.distcode=a.distdyn,V={bits:a.distbits},Q=h(2,a.lens,a.nlen,a.ndist,a.distcode,0,a.work,V),a.distbits=V.bits,Q){e.msg="invalid distances set",a.mode=D;break}if(a.mode=T,i===b)break e;case T:a.mode=O;case O:if(d>=6&&c>=258){e.next_out=f,e.avail_out=c,e.next_in=l,e.avail_in=d,a.hold=B,a.bits=N,r(e,F),f=e.next_out,s=e.output,c=e.avail_out,l=e.next_in,o=e.input,d=e.avail_in,B=a.hold,N=a.bits,a.mode===A&&(a.back=-1);break}for(a.back=0;Y=(ee=a.lencode[B&(1<<a.lenbits)-1])>>>16&255,G=65535&ee,!((j=ee>>>24)<=N);){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}if(Y&&0==(240&Y)){for(X=j,W=Y,q=G;Y=(ee=a.lencode[q+((B&(1<<X+W)-1)>>X)])>>>16&255,G=65535&ee,!(X+(j=ee>>>24)<=N);){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}B>>>=X,N-=X,a.back+=X}if(B>>>=j,N-=j,a.back+=j,a.length=G,0===Y){a.mode=16205;break}if(32&Y){a.back=-1,a.mode=A;break}if(64&Y){e.msg="invalid literal/length code",a.mode=D;break}a.extra=15&Y,a.mode=16201;case 16201:if(a.extra){for($=a.extra;N<$;){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}a.length+=B&(1<<a.extra)-1,B>>>=a.extra,N-=a.extra,a.back+=a.extra}a.was=a.length,a.mode=16202;case 16202:for(;Y=(ee=a.distcode[B&(1<<a.distbits)-1])>>>16&255,G=65535&ee,!((j=ee>>>24)<=N);){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}if(0==(240&Y)){for(X=j,W=Y,q=G;Y=(ee=a.distcode[q+((B&(1<<X+W)-1)>>X)])>>>16&255,G=65535&ee,!(X+(j=ee>>>24)<=N);){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}B>>>=X,N-=X,a.back+=X}if(B>>>=j,N-=j,a.back+=j,64&Y){e.msg="invalid distance code",a.mode=D;break}a.offset=G,a.extra=15&Y,a.mode=16203;case 16203:if(a.extra){for($=a.extra;N<$;){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}a.offset+=B&(1<<a.extra)-1,B>>>=a.extra,N-=a.extra,a.back+=a.extra}if(a.offset>a.dmax){e.msg="invalid distance too far back",a.mode=D;break}a.mode=16204;case 16204:if(0===c)break e;if(L=F-c,a.offset>L){if((L=a.offset-L)>a.whave&&a.sane){e.msg="invalid distance too far back",a.mode=D;break}L>a.wnext?(L-=a.wnext,M=a.wsize-L):M=a.wnext-L,L>a.length&&(L=a.length),H=a.window}else H=s,M=f-a.offset,L=a.length;L>c&&(L=c),c-=L,a.length-=L;do{s[f++]=H[M++]}while(--L);0===a.length&&(a.mode=O);break;case 16205:if(0===c)break e;s[f++]=a.length,c--,a.mode=O;break;case U:if(a.wrap){for(;N<32;){if(0===d)break e;d--,B|=o[l++]<<N,N+=8}if(F-=c,e.total_out+=F,a.total+=F,4&a.wrap&&F&&(e.adler=a.check=a.flags?n(a.check,s,F,f-F):t(a.check,s,F,f-F)),F=c,4&a.wrap&&(a.flags?B:I(B))!==a.check){e.msg="incorrect data check",a.mode=D;break}B=0,N=0}a.mode=16207;case 16207:if(a.wrap&&a.flags){for(;N<32;){if(0===d)break e;d--,B+=o[l++]<<N,N+=8}if(4&a.wrap&&B!==(4294967295&a.total)){e.msg="incorrect length check",a.mode=D;break}B=0,N=0}a.mode=16208;case 16208:Q=k;break e;case D:Q=g;break e;case 16210:return p;default:return v}return e.next_out=f,e.avail_out=c,e.next_in=l,e.avail_in=d,a.hold=B,a.bits=N,(a.wsize||F!==e.avail_out&&a.mode<D&&(a.mode<U||i!==u))&&P(e,e.output,e.next_out,F-e.avail_out),C-=e.avail_in,F-=e.avail_out,e.total_in+=C,e.total_out+=F,a.total+=F,4&a.wrap&&F&&(e.adler=a.check=a.flags?n(a.check,s,F,e.next_out-F):t(a.check,s,F,e.next_out-F)),e.data_type=a.bits+(a.last?64:0)+(a.mode===A?128:0)+(a.mode===T||a.mode===S?256:0),(0===C&&0===F||i===u)&&Q===m&&(Q=y),Q},inflateEnd:function(e){if(z(e))return v;var t=e.state;return t.window&&(t.window=null),e.state=null,m},inflateGetHeader:function(e,t){if(z(e))return v;var i=e.state;return 0==(2&i.wrap)?v:(i.head=t,t.done=!1,m)},inflateSetDictionary:function(e,i){var n,a=i.length;return z(e)||0!==(n=e.state).wrap&&n.mode!==R?v:n.mode===R&&t(1,i,a,0)!==n.check?g:P(e,i,a,a)?(n.mode=16210,p):(n.havedict=1,m)},inflateInfo:"pako inflate (from Nodeca project)"};function G(e){return G="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},G(e)}var X=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},W=function(e){for(var t=Array.prototype.slice.call(arguments,1);t.length;){var i=t.shift();if(i){if("object"!==G(i))throw new TypeError(i+"must be non-object");for(var n in i)X(i,n)&&(e[n]=i[n])}}return e},q=function(e){for(var t=0,i=0,n=e.length;i<n;i++)t+=e[i].length;for(var a=new Uint8Array(t),r=0,o=0,s=e.length;r<s;r++){var l=e[r];a.set(l,o),o+=l.length}return a},J=!0;try{String.fromCharCode.apply(null,new Uint8Array(1))}catch(e){J=!1}for(var Q=new Uint8Array(256),V=0;V<256;V++)Q[V]=V>=252?6:V>=248?5:V>=240?4:V>=224?3:V>=192?2:1;Q[254]=Q[254]=1;var $=function(e){if("function"==typeof TextEncoder&&TextEncoder.prototype.encode)return(new TextEncoder).encode(e);var t,i,n,a,r,o=e.length,s=0;for(a=0;a<o;a++)55296==(64512&(i=e.charCodeAt(a)))&&a+1<o&&56320==(64512&(n=e.charCodeAt(a+1)))&&(i=65536+(i-55296<<10)+(n-56320),a++),s+=i<128?1:i<2048?2:i<65536?3:4;for(t=new Uint8Array(s),r=0,a=0;r<s;a++)55296==(64512&(i=e.charCodeAt(a)))&&a+1<o&&56320==(64512&(n=e.charCodeAt(a+1)))&&(i=65536+(i-55296<<10)+(n-56320),a++),i<128?t[r++]=i:i<2048?(t[r++]=192|i>>>6,t[r++]=128|63&i):i<65536?(t[r++]=224|i>>>12,t[r++]=128|i>>>6&63,t[r++]=128|63&i):(t[r++]=240|i>>>18,t[r++]=128|i>>>12&63,t[r++]=128|i>>>6&63,t[r++]=128|63&i);return t},ee=function(e,t){var i,n,a=t||e.length;if("function"==typeof TextDecoder&&TextDecoder.prototype.decode)return(new TextDecoder).decode(e.subarray(0,t));var r=new Array(2*a);for(n=0,i=0;i<a;){var o=e[i++];if(o<128)r[n++]=o;else{var s=Q[o];if(s>4)r[n++]=65533,i+=s-1;else{for(o&=2===s?31:3===s?15:7;s>1&&i<a;)o=o<<6|63&e[i++],s--;s>1?r[n++]=65533:o<65536?r[n++]=o:(o-=65536,r[n++]=55296|o>>10&1023,r[n++]=56320|1023&o)}}}return function(e,t){if(t<65534&&e.subarray&&J)return String.fromCharCode.apply(null,e.length===t?e:e.subarray(0,t));for(var i="",n=0;n<t;n++)i+=String.fromCharCode(e[n]);return i}(r,n)},te=function(e,t){(t=t||e.length)>e.length&&(t=e.length);for(var i=t-1;i>=0&&128==(192&e[i]);)i--;return i<0||0===i?t:i+Q[e[i]]>t?i:t},ie={2:"need dictionary",1:"stream end",0:"","-1":"file error","-2":"stream error","-3":"data error","-4":"insufficient memory","-5":"buffer error","-6":"incompatible version"};var ne=function(){this.input=null,this.next_in=0,this.avail_in=0,this.total_in=0,this.output=null,this.next_out=0,this.avail_out=0,this.total_out=0,this.msg="",this.state=null,this.data_type=2,this.adler=0};var ae=function(){this.text=0,this.time=0,this.xflags=0,this.os=0,this.extra=null,this.extra_len=0,this.name="",this.comment="",this.hcrc=0,this.done=!1},re=Object.prototype.toString,oe=c.Z_NO_FLUSH,se=c.Z_FINISH,le=c.Z_OK,fe=c.Z_STREAM_END,de=c.Z_NEED_DICT,he=c.Z_STREAM_ERROR,ce=c.Z_DATA_ERROR,ue=c.Z_MEM_ERROR;function we(e){this.options=W({chunkSize:65536,windowBits:15,to:""},e||{});var t=this.options;t.raw&&t.windowBits>=0&&t.windowBits<16&&(t.windowBits=-t.windowBits,0===t.windowBits&&(t.windowBits=-15)),!(t.windowBits>=0&&t.windowBits<16)||e&&e.windowBits||(t.windowBits+=32),t.windowBits>15&&t.windowBits<48&&0==(15&t.windowBits)&&(t.windowBits|=15),this.err=0,this.msg="",this.ended=!1,this.chunks=[],this.strm=new ne,this.strm.avail_out=0;var i=Y.inflateInit2(this.strm,t.windowBits);if(i!==le)throw new Error(ie[i]);if(this.header=new ae,Y.inflateGetHeader(this.strm,this.header),t.dictionary&&("string"==typeof t.dictionary?t.dictionary=$(t.dictionary):"[object ArrayBuffer]"===re.call(t.dictionary)&&(t.dictionary=new Uint8Array(t.dictionary)),t.raw&&(i=Y.inflateSetDictionary(this.strm,t.dictionary))!==le))throw new Error(ie[i])}function be(e,t){var i=new we(t);if(i.push(e),i.err)throw i.msg||ie[i.err];return i.result}we.prototype.push=function(e,t){var i,n,a,r=this.strm,o=this.options.chunkSize,s=this.options.dictionary;if(this.ended)return!1;for(n=t===~~t?t:!0===t?se:oe,"[object ArrayBuffer]"===re.call(e)?r.input=new Uint8Array(e):r.input=e,r.next_in=0,r.avail_in=r.input.length;;){for(0===r.avail_out&&(r.output=new Uint8Array(o),r.next_out=0,r.avail_out=o),(i=Y.inflate(r,n))===de&&s&&((i=Y.inflateSetDictionary(r,s))===le?i=Y.inflate(r,n):i===ce&&(i=de));r.avail_in>0&&i===fe&&r.state.wrap>0&&0!==e[r.next_in];)Y.inflateReset(r),i=Y.inflate(r,n);switch(i){case he:case ce:case de:case ue:return this.onEnd(i),this.ended=!0,!1}if(a=r.avail_out,r.next_out&&(0===r.avail_out||i===fe))if("string"===this.options.to){var l=te(r.output,r.next_out),f=r.next_out-l,d=ee(r.output,l);r.next_out=f,r.avail_out=o-f,f&&r.output.set(r.output.subarray(l,l+f),0),this.onData(d)}else this.onData(r.output.length===r.next_out?r.output:r.output.subarray(0,r.next_out));if(i!==le||0!==a){if(i===fe)return i=Y.inflateEnd(this.strm),this.onEnd(i),this.ended=!0,!0;if(0===r.avail_in)break}}return!0},we.prototype.onData=function(e){this.chunks.push(e)},we.prototype.onEnd=function(e){e===le&&("string"===this.options.to?this.result=this.chunks.join(""):this.result=q(this.chunks)),this.chunks=[],this.err=e,this.msg=this.strm.msg};var me=we,ke=be,_e=function(e,t){return(t=t||{}).raw=!0,be(e,t)},ve=be,ge=c,pe={Inflate:me,inflate:ke,inflateRaw:_e,ungzip:ve,constants:ge};e.Inflate=me,e.constants=ge,e.default=pe,e.inflate=ke,e.inflateRaw=_e,e.ungzip=ve,Object.defineProperty(e,"__esModule",{value:!0})}));
+
+</script>
+<script>
+// ===== NAVIGATION =====
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + pageId).classList.add('active');
+
+  // Update nav highlights
+  document.querySelectorAll('[data-page]').forEach(a => {
+    a.classList.toggle('active', a.dataset.page === pageId);
+  });
+  window.scrollTo(0, 0);
+}
+
+function toggleMobileMenu() {
+  document.getElementById('mobileMenuOverlay').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+// ===== MEETS =====
+function filterMeets() {
+  // In production: fetch from API. Demo just shows the table.
+}
+
+function showMeetDetail(name) {
+  alert('In production, this opens the full results page for ' + name + ' with all races, entries, photos, and articles.');
+}
+
+// ===== ENTRY FORM =====
+let currentStep = 1;
+
+function goToEntryStep(step) {
+  document.querySelectorAll('[id^="entryStep"]').forEach(el => el.classList.add('hidden'));
+  document.getElementById('entryStep' + step).classList.remove('hidden');
+
+  for (let i = 1; i <= 4; i++) {
+    const num = document.getElementById('stepNum' + i);
+    const label = document.getElementById('stepLabel' + i);
+    num.classList.remove('active', 'done');
+    label.classList.remove('active');
+    if (i < step) {
+      num.classList.add('done');
+      num.innerHTML = '&#10003;';
+    } else if (i === step) {
+      num.classList.add('active');
+      label.classList.add('active');
+      num.textContent = i;
+    } else {
+      num.textContent = i;
+    }
+    if (i < 4) {
+      const conn = document.getElementById('stepConn' + i);
+      conn.classList.toggle('done', i < step);
+    }
+  }
+  currentStep = step;
+}
+
+function selectMeet(el, meetName) {
+  document.querySelectorAll('.touch-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ===== BATCH ENTRY & FEE COLLECTION =====
+let entryBatch = [];
+const ENTRY_FEE = 75; // $75 per entry — in production, varies by race type
+
+function addEntryToBatch() {
+  // Demo: build an entry from hard-coded values shown in the confirm grid
+  const entry = {
+    horse: 'AMERICAN FARMER',
+    meet: 'Potomac Hunt Races',
+    race: 'Maiden Timber',
+    rider: 'Walsh, G. (A)',
+    owner: document.getElementById('entryOwner').value || 'Timber Creek Farm',
+    trainer: document.getElementById('entryTrainer').value || 'Walsh, G.',
+    weight: document.getElementById('entryWeight').value || '165',
+    fee: ENTRY_FEE
+  };
+
+  // Vary the demo data if this is the 2nd+ entry
+  if (entryBatch.length === 1) {
+    entry.horse = 'BOURBON COURAGE';
+    entry.race = 'Allowance Timber';
+  } else if (entryBatch.length >= 2) {
+    entry.horse = 'CHABLIS';
+    entry.race = 'Open Flat';
+    entry.meet = 'Radnor Hunt Races';
+  }
+
+  entryBatch.push(entry);
+  updateEntryTally();
+
+  // Show the "Added" confirmation
+  document.querySelectorAll('[id^="entryStep"]').forEach(el => el.classList.add('hidden'));
+  document.getElementById('entryStepAdded').classList.remove('hidden');
+  document.getElementById('entryCheckout').classList.add('hidden');
+
+  document.getElementById('addedEntryMsg').textContent =
+    entry.horse + ' — ' + entry.race + ' at ' + entry.meet;
+  document.getElementById('addedEntryTally').textContent =
+    entryBatch.length + (entryBatch.length === 1 ? ' entry' : ' entries') +
+    ' · $' + (entryBatch.length * ENTRY_FEE).toFixed(2) + ' total';
+
+  // Reset the confirm checkbox
+  document.getElementById('entryConfirmCheck').checked = false;
+}
+
+function updateEntryTally() {
+  const tally = document.getElementById('entryTally');
+  const count = entryBatch.length;
+  if (count > 0) {
+    tally.classList.remove('hidden');
+    document.getElementById('entryTallyCount').textContent = count;
+    document.getElementById('entryTallyLabel').textContent = count === 1 ? 'entry' : 'entries';
+    document.getElementById('entryTallyFee').textContent = '$' + (count * ENTRY_FEE).toFixed(2);
+  } else {
+    tally.classList.add('hidden');
+  }
+}
+
+function enterAnotherHorse() {
+  // Reset form back to step 1
+  document.getElementById('entryStepAdded').classList.add('hidden');
+  document.getElementById('entryCheckout').classList.add('hidden');
+  goToEntryStep(1);
+}
+
+function goToCheckout() {
+  if (entryBatch.length === 0) {
+    alert('No entries queued. Add at least one entry first.');
+    return;
+  }
+  // Hide all entry steps and the "added" screen
+  document.querySelectorAll('[id^="entryStep"]').forEach(el => el.classList.add('hidden'));
+  document.getElementById('entryStepAdded').classList.add('hidden');
+  document.getElementById('entryCheckout').classList.remove('hidden');
+
+  // Build checkout items
+  const container = document.getElementById('checkoutItems');
+  container.innerHTML = '';
+  entryBatch.forEach((e, i) => {
+    const div = document.createElement('div');
+    div.className = 'checkout-item';
+    div.innerHTML = `
+      <div>
+        <div class="checkout-item-horse">${i + 1}. ${e.horse}</div>
+        <div class="checkout-item-detail">${e.race} — ${e.meet}</div>
+      </div>
+      <div class="checkout-item-fee">$${e.fee.toFixed(2)}</div>
+    `;
+    container.appendChild(div);
+  });
+
+  const total = entryBatch.length * ENTRY_FEE;
+  document.getElementById('checkoutTotal').textContent = '$' + total.toFixed(2);
+  document.getElementById('checkoutPayAmount').textContent = '$' + total.toFixed(2);
+}
+
+function selectPayment(el, method) {
+  el.parentElement.querySelectorAll('.touch-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  const cardForm = document.getElementById('paymentCardForm');
+  cardForm.style.display = method === 'card' ? '' : 'none';
+}
+
+function processPayment() {
+  const total = entryBatch.length * ENTRY_FEE;
+  const count = entryBatch.length;
+  alert(
+    'Payment of $' + total.toFixed(2) + ' processed successfully!\n\n' +
+    count + (count === 1 ? ' entry' : ' entries') + ' submitted.\n' +
+    'A confirmation email with receipt will be sent to the address on file.\n\n' +
+    'In production, this uses Stripe Checkout or Stripe Elements for PCI-compliant card processing. ' +
+    'Entry confirmations are emailed and entries appear in the admin results system.'
+  );
+  // Reset
+  entryBatch = [];
+  updateEntryTally();
+  document.getElementById('entryCheckout').classList.add('hidden');
+  goToEntryStep(1);
+}
+
+function submitEntry() {
+  // Legacy single-entry fallback — redirects to batch flow
+  addEntryToBatch();
+}
+
+// ===== ARCHIVE / REPORTS =====
+let DEMO_ARCHIVE = [];
+let ARCHIVE_VOCAB = {};
+let ARCHIVE_META = {};
+
+
+async function archiveLoad() {
+  const resp = await fetch('data/archive.json.gz', { cache: 'no-cache' });
+  if (!resp.ok) throw new Error('Could not load the results archive (' + resp.status + ').');
+  const bin = new Uint8Array(await resp.arrayBuffer());
+  let text;
+  if (typeof DecompressionStream === 'function') {
+    const ds = new DecompressionStream('gzip');
+    const stream = new Blob([bin]).stream().pipeThrough(ds);
+    text = await new Response(stream).text();
+  } else if (typeof pako !== 'undefined') {
+    text = pako.inflate(bin, { to: 'string' });   // anything back to ~2016
+  } else {
+    throw new Error('This browser is too old to open the archive. Please use Chrome, Edge, Safari or Firefox.');
+  }
+  const p = JSON.parse(text);
+  const F = p.f, V = p.v;
+  ARCHIVE_META = p.counts; ARCHIVE_META.built = p.built;
+  // names are stored once and referenced by index -- rebuild the row objects
+  DEMO_ARCHIVE = p.r.map(row => {
+    const o = {};
+    for (let i = 0; i < F.length; i++) o[F[i]] = V[F[i]][row[i]];
+    o.weight = row[F.length]; o.purse = row[F.length+1]; o.year = row[F.length+2];
+    return o;
+  });
+  // one sorted vocabulary per field, so autocomplete never scans 150,000 rows
+  ARCHIVE_VOCAB = {};
+  ['horse','rider','trainer','owner','meet','sire'].forEach(k => {
+    ARCHIVE_VOCAB[k] = V[k].filter(Boolean).sort();
+  });
+  return DEMO_ARCHIVE.length;
+}
+
+let archiveFilters = {};
+let archiveView = [];
+let archiveSelected = new Set();
+let archiveSortCol = 'date';
+let archiveSortDir = -1;
+
+const ARCHIVE_COLS = [
+  { key:'date', label:'Date', cls:'' },
+  { key:'meet', label:'Meet', cls:'' },
+  { key:'race', label:'Race', cls:'' },
+  { key:'horse', label:'Horse', cls:'' },
+  { key:'fin', label:'Fin', cls:'' },
+  { key:'rider', label:'Rider', cls:'' },
+  { key:'owner', label:'Owner', cls:'' },
+  { key:'trainer', label:'Trainer', cls:'' },
+  { key:'weight', label:'Wgt', cls:'num' },
+  { key:'purse', label:'Purse', cls:'num' },
+];
+
+function archiveAutocomplete(q) {
+  const el = document.getElementById('archiveSugg');
+  if (q.length < 2) { el.style.display = 'none'; return; }
+  q = q.toLowerCase();
+  const groups = {};
+  ['horse','rider','trainer','owner','meet','sire'].forEach(k => {
+    const list = ARCHIVE_VOCAB[k] || [];
+    const starts = [], contains = [];
+    for (let i = 0; i < list.length; i++) {
+      const lc = list[i].toLowerCase();
+      if (lc.startsWith(q)) { if (starts.length < 6) starts.push(list[i]); }
+      else if (lc.includes(q) && contains.length < 6) contains.push(list[i]);
+      if (starts.length >= 6) break;
+    }
+    const hits = starts.concat(contains).slice(0, 6);
+    if (hits.length) groups[k] = hits;
+  });
+  let html = '';
+  for (const [type, items] of Object.entries(groups)) {
+    html += '<div style="padding:6px 12px 3px; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted);">' + type + '</div>';
+    items.forEach(item => {
+      const safe = item.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      html += '<div style="padding:7px 12px; cursor:pointer; font-size:14px;" onmouseover="this.style.background=\'#e8f0eb\'" onmouseout="this.style.background=\'\'" onclick="archiveAddFilter(\'' + type + '\',\'' + safe + '\')">' + item + '</div>';
+    });
+  }
+  if (!html) html = '<div style="padding:10px 12px; color:var(--text-muted); font-size:13px;">No matches found</div>';
+  el.innerHTML = html;
+  el.style.display = 'block';
+}
+
+function archiveAddFilter(key, value) {
+  archiveFilters[key] = value;
+  document.getElementById('archiveSearch').value = '';
+  document.getElementById('archiveSugg').style.display = 'none';
+  archiveRun();
+}
+
+function archiveRemoveFilter(key) {
+  delete archiveFilters[key];
+  archiveRun();
+}
+
+function archiveRun() {
+  // Render chips
+  const chipEl = document.getElementById('archiveChips');
+  chipEl.innerHTML = '';
+  const keys = Object.keys(archiveFilters);
+  keys.forEach(k => {
+    const chip = document.createElement('span');
+    chip.className = 'archive-chip';
+    chip.innerHTML = '<i>' + k + '</i> <b>' + archiveFilters[k] + '</b>';
+    const x = document.createElement('button');
+    x.textContent = '×';
+    x.onclick = () => archiveRemoveFilter(k);
+    chip.appendChild(x);
+    chipEl.appendChild(chip);
+  });
+  if (keys.length > 1) {
+    const clear = document.createElement('button');
+    clear.textContent = 'clear all';
+    clear.style.cssText = 'border:1px solid var(--border); background:white; border-radius:20px; padding:4px 12px; font-size:13px; cursor:pointer; color:var(--text-muted);';
+    clear.onclick = () => { archiveFilters = {}; archiveRun(); };
+    chipEl.appendChild(clear);
+  }
+
+  // Filter data
+  archiveView = DEMO_ARCHIVE.filter(r => {
+    for (const [k,v] of Object.entries(archiveFilters)) {
+      // NOT `r[k] && r[k] !== v` -- a blank field is falsy, so rows with no
+      // rider/trainer/owner recorded would skip the test and match EVERY filter,
+      // adding themselves to whoever was searched.
+      if (r[k] !== v) return false;
+    }
+    return true;
+  });
+
+  // Sort
+  archiveView.sort((a,b) => {
+    const col = archiveSortCol === 'date' ? 'iso' : archiveSortCol;   // May < Sep, not alphabetical
+    const va = a[col], vb = b[col];
+    if (va < vb) return -archiveSortDir;
+    if (va > vb) return archiveSortDir;
+    return 0;
+  });
+
+  // Stats
+  if (keys.length > 0) {
+    const stats = archiveCalcStats(archiveView);
+    archiveRenderStats(stats);
+  } else {
+    document.getElementById('archiveStats').style.display = 'none';
+  }
+
+  // Table
+  archiveRenderTable();
+  archiveSelected.clear();
+  archiveUpdateSelBar();
+}
+
+function archiveCalcStats(data) {
+  if (!data.length) return null;
+  const wins = data.filter(r => r.fin === '1st').length;
+  const seconds = data.filter(r => r.fin === '2nd').length;
+  const thirds = data.filter(r => r.fin === '3rd').length;
+  const top3 = wins + seconds + thirds;
+  const earnings = data.reduce((s,r) => s + (r.purse||0), 0);
+  const venues = new Set(data.map(r => r.meet)).size;
+  const dates = data.map(r => r.date);
+  // Count venue wins
+  const venueWins = {};
+  data.filter(r => r.fin === '1st').forEach(r => { venueWins[r.meet] = (venueWins[r.meet]||0)+1; });
+  let bestVenue = '', bestVenueWins = 0;
+  for (const [v,c] of Object.entries(venueWins)) { if (c > bestVenueWins) { bestVenue = v; bestVenueWins = c; } }
+  return {
+    starts: data.length,
+    wins, seconds, thirds, top3,
+    win_pct: (data.length ? (wins/data.length*100).toFixed(1) : '0'),
+    top3_pct: (data.length ? (top3/data.length*100).toFixed(0) : '0'),
+    earnings, venues, bestVenue, bestVenueWins
+  };
+}
+
+function archiveRenderStats(s) {
+  const el = document.getElementById('archiveStats');
+  if (!s || !s.starts) { el.style.display = 'none'; return; }
+  const cards = [
+    ['Starts', s.starts.toLocaleString(), ''],
+    ['Wins', s.wins + '  (' + s.win_pct + '%)', 'win'],
+    ['2nd / 3rd', s.seconds + ' / ' + s.thirds, ''],
+    ['Top 3', s.top3_pct + '%', ''],
+    ['Earnings', '$' + s.earnings.toLocaleString(), ''],
+    ['Venues', s.venues, ''],
+  ];
+  if (s.bestVenue) cards.push(['Most wins at', s.bestVenue + ' (' + s.bestVenueWins + ')', '']);
+  el.style.display = 'flex';
+  el.innerHTML = cards.map(c =>
+    '<div class="archive-stat"><div class="archive-stat-v ' + c[2] + '">' + c[1] + '</div><div class="archive-stat-l">' + c[0] + '</div></div>'
+  ).join('');
+}
+
+function archiveRenderTable() {
+  const landing = document.getElementById('archiveLanding');
+  const table = document.getElementById('archiveTable');
+  const keys = Object.keys(archiveFilters);
+  if (keys.length === 0) {
+    landing.style.display = '';
+    table.style.display = 'none';
+    document.getElementById('archiveCount').textContent = '';
+    return;
+  }
+  landing.style.display = 'none';
+  table.style.display = '';
+
+  // Header
+  const thead = document.getElementById('archiveThead');
+  thead.innerHTML = '<th style="width:36px; padding:9px 6px;"><input type="checkbox" id="archiveSelAll" onchange="archiveToggleAll(this.checked)"></th>' +
+    ARCHIVE_COLS.map(c => {
+      const arrow = archiveSortCol === c.key ? '<span class="sort-arrow">' + (archiveSortDir > 0 ? '▲' : '▼') + '</span>' : '';
+      return '<th onclick="archiveSort(\'' + c.key + '\')" style="padding:9px 11px;">' + c.label + arrow + '</th>';
+    }).join('');
+
+  // Body
+  const tbody = document.getElementById('archiveTbody');
+  tbody.innerHTML = '';
+  const CAP = 500;
+  const shown = archiveView.slice(0, CAP);
+  if (archiveView.length > CAP) {
+    const note = document.getElementById('archiveCount');
+    if (note) note.textContent = 'showing first ' + CAP + ' of ' + archiveView.length.toLocaleString() + ' starts';
+  }
+  shown.forEach((r, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td style="padding:7px 6px;"><input type="checkbox" data-idx="' + i + '" onchange="archiveToggleSel(' + i + ', this.checked)"></td>' +
+      ARCHIVE_COLS.map(c => {
+        let val = r[c.key];
+        let cls = '';
+        if (c.key === 'fin' && val === '1st') cls = ' class="win-cell"';
+        if (c.key === 'purse') val = val ? '$' + val.toLocaleString() : '—';
+        if (c.key === 'horse' || c.key === 'rider' || c.key === 'trainer' || c.key === 'owner' || c.key === 'meet') {
+          return '<td' + cls + ' style="padding:7px 11px;"><span style="cursor:pointer; border-bottom:1px dotted #b9c0d0;" onclick="archiveAddFilter(\'' + c.key + '\',\'' + String(val).replace(/'/g,"\\'") + '\')">' + val + '</span></td>';
+        }
+        return '<td' + cls + ' style="padding:7px 11px; ' + (c.cls === 'num' ? 'text-align:right; font-variant-numeric:tabular-nums;' : '') + '">' + val + '</td>';
+      }).join('');
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById('archiveCount').textContent = archiveView.length + ' results';
+}
+
+function archiveSort(col) {
+  if (archiveSortCol === col) archiveSortDir *= -1;
+  else { archiveSortCol = col; archiveSortDir = 1; }
+  archiveRun();
+}
+
+function archiveToggleSel(idx, checked) {
+  if (checked) archiveSelected.add(idx); else archiveSelected.delete(idx);
+  archiveUpdateSelBar();
+}
+
+function archiveToggleAll(checked) {
+  archiveView.forEach((_, i) => { if (checked) archiveSelected.add(i); else archiveSelected.delete(i); });
+  document.querySelectorAll('#archiveTbody input[type=checkbox]').forEach(cb => cb.checked = checked);
+  archiveUpdateSelBar();
+}
+
+function archiveClearSel() {
+  archiveSelected.clear();
+  document.querySelectorAll('#archiveTbody input[type=checkbox]').forEach(cb => cb.checked = false);
+  document.getElementById('archiveSelAll').checked = false;
+  archiveUpdateSelBar();
+}
+
+function archiveUpdateSelBar() {
+  const n = archiveSelected.size;
+  document.getElementById('archiveSelN').textContent = n;
+  document.getElementById('archiveSelBar').style.display = n > 0 ? '' : 'none';
+}
+
+function archiveExport(format) {
+  const data = archiveSelected.size > 0 ? [...archiveSelected].map(i => archiveView[i]) : archiveView;
+  if (!data.length) { alert('No results to export. Search first.'); return; }
+  if (format === 'csv') {
+    let csv = ARCHIVE_COLS.map(c => c.label).join(',') + '\n';
+    data.forEach(r => { csv += ARCHIVE_COLS.map(c => '"' + String(r[c.key]||'').replace(/"/g,'""') + '"').join(',') + '\n'; });
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ceo_results_export.csv';
+    a.click();
+  } else {
+    // Print/PDF — open print dialog
+    const who = Object.entries(archiveFilters).map(([k,v]) => k + ': ' + v).join(' · ') || 'All Results';
+    const win = window.open('', '_blank');
+    let html = '<html><head><title>CEO Results — ' + who + '</title><style>body{font:13px -apple-system,sans-serif; margin:24px;} h1{font:bold 18px Georgia,serif; margin:0 0 4px;} .cap{color:#666; font-size:12px; margin-bottom:14px;} table{border-collapse:collapse; width:100%;} th{text-align:left; padding:6px 8px; border-bottom:2px solid #1a4d2e; font-size:11px; background:#f5ead8;} td{padding:5px 8px; border-bottom:1px solid #eee; font-size:12px;} .win{color:#a68a2e; font-weight:bold;} @media print{body{margin:12px;}}</style></head><body>';
+    html += '<h1>Central Entry Office</h1><div class="cap">' + who + ' — ' + data.length + ' results — ' + new Date().toLocaleDateString() + '</div>';
+    html += '<table><thead><tr>' + ARCHIVE_COLS.map(c => '<th>' + c.label + '</th>').join('') + '</tr></thead><tbody>';
+    data.forEach(r => {
+      html += '<tr>' + ARCHIVE_COLS.map(c => {
+        let v = r[c.key];
+        if (c.key === 'purse') v = v ? '$' + v.toLocaleString() : '—';
+        const cls = c.key === 'fin' && v === '1st' ? ' class="win"' : '';
+        return '<td' + cls + '>' + v + '</td>';
+      }).join('') + '</tr>';
+    });
+    html += '</tbody></table></body></html>';
+    win.document.write(html);
+    win.document.close();
+    win.print();
+  }
+}
+
+function archiveSwitchTab(btn, tab) {
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('archiveTableWrap').style.display = tab === 'starts' ? '' : 'none';
+  document.getElementById('archiveLeaders').style.display = tab === 'leaders' ? '' : 'none';
+  if (tab === 'leaders') archiveLoadLeaders();
+}
+
+function archiveLoadLeaders() {
+  const cat = document.getElementById('lbCategory').value;
+  const catLabel = { rider:'Rider', trainer:'Trainer', owner:'Owner', horse:'Horse', sire:'Sire' }[cat] || cat;
+  // Demo leaderboard data
+  const leaders = {
+    rider: [
+      { name:'Walsh, G.', starts:42, w:12, p2:8, p3:6, earnings:32500 },
+      { name:'Murphy, T.', starts:38, w:10, p2:7, p3:5, earnings:28400 },
+      { name:'Hendriks, B.', starts:31, w:7, p2:5, p3:4, earnings:18200 },
+      { name:'Rafter, K.', starts:28, w:6, p2:4, p3:5, earnings:16800 },
+      { name:'Dalton, P.', starts:25, w:5, p2:3, p3:4, earnings:12500 },
+      { name:'Young, S.', starts:22, w:4, p2:3, p3:2, earnings:9800 },
+    ],
+    trainer: [
+      { name:'Walsh, G.', starts:56, w:15, p2:10, p3:8, earnings:42000 },
+      { name:'Voss, J.', starts:44, w:11, p2:8, p3:6, earnings:35200 },
+      { name:'Fisher, A.', starts:35, w:9, p2:5, p3:4, earnings:22400 },
+      { name:'Meister, J.', starts:30, w:6, p2:5, p3:3, earnings:15600 },
+    ],
+    owner: [
+      { name:'Timber Creek Farm', starts:34, w:9, p2:6, p3:5, earnings:24500 },
+      { name:'Augustin Stable', starts:28, w:8, p2:4, p3:4, earnings:21600 },
+      { name:'Iron Horse Farm', starts:22, w:5, p2:3, p3:3, earnings:14200 },
+      { name:'Kinross Farm', starts:18, w:3, p2:4, p3:2, earnings:9800 },
+    ],
+    horse: [
+      { name:'FLATTERER', starts:18, w:7, p2:3, p3:2, earnings:28500 },
+      { name:'GALLORETTE', starts:10, w:4, p2:2, p3:1, earnings:12400 },
+      { name:'AMERICAN FARMER', starts:12, w:3, p2:1, p3:1, earnings:8750 },
+      { name:'NIGHTCAP', starts:8, w:2, p2:2, p3:1, earnings:5300 },
+      { name:'BOURBON COURAGE', starts:7, w:1, p2:1, p3:1, earnings:3900 },
+    ],
+    sire: [
+      { name:'Ghostzapper', starts:10, w:4, p2:2, p3:1, earnings:12400 },
+      { name:'Mo Exception', starts:10, w:3, p2:2, p3:2, earnings:9500 },
+      { name:'Gio Ponti', starts:12, w:3, p2:1, p3:1, earnings:8750 },
+      { name:'War Front', starts:8, w:2, p2:2, p3:1, earnings:5300 },
+      { name:'Curlin', starts:7, w:1, p2:1, p3:1, earnings:3900 },
+      { name:'Blame', starts:6, w:0, p2:1, p3:0, earnings:600 },
+    ],
+  };
+  const data = leaders[cat] || [];
+
+  document.getElementById('lbThead').innerHTML =
+    '<th>Rank</th><th>' + catLabel + '</th><th>Starts</th><th>1st</th><th>2nd</th><th>3rd</th><th>Win%</th><th>Earnings</th>';
+
+  document.getElementById('lbTbody').innerHTML = data.map((d, i) =>
+    '<tr>' +
+      '<td style="font-weight:700;">' + (i+1) + '</td>' +
+      '<td><span style="cursor:pointer; border-bottom:1px dotted #b9c0d0;" onclick="archiveAddFilter(\'' + cat + '\',\'' + d.name.replace(/'/g,"\\'") + '\')">' + d.name + '</span></td>' +
+      '<td>' + d.starts + '</td>' +
+      '<td>' + d.w + '</td>' +
+      '<td>' + d.p2 + '</td>' +
+      '<td>' + d.p3 + '</td>' +
+      '<td>' + (d.starts ? (d.w/d.starts*100).toFixed(1) : '0') + '%</td>' +
+      '<td>$' + d.earnings.toLocaleString() + '</td>' +
+    '</tr>'
+  ).join('');
+}
+
+// Close autocomplete on outside click
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#archiveSearch') && !e.target.closest('#archiveSugg')) {
+    document.getElementById('archiveSugg').style.display = 'none';
+  }
+});
+
+// ===== STANDINGS =====
+function generateStandings() {
+  document.getElementById('standingsResults').classList.remove('hidden');
+}
+
+// ===== ADMIN =====
+function switchAdminTab(btn, tabId) {
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('adminUpload').classList.add('hidden');
+  document.getElementById('adminManual').classList.add('hidden');
+  document.getElementById('adminPending').classList.add('hidden');
+  document.getElementById('admin' + tabId.charAt(0).toUpperCase() + tabId.slice(1)).classList.remove('hidden');
+}
+
+function handleFileUpload(input) {
+  if (input.files.length > 0) {
+    document.getElementById('uploadZone').style.display = 'none';
+    document.getElementById('uploadPreview').classList.remove('hidden');
+  }
+}
+
+function clearUpload() {
+  document.getElementById('uploadZone').style.display = '';
+  document.getElementById('uploadPreview').classList.add('hidden');
+  document.getElementById('fileInput').value = '';
+}
+
+function confirmUpload() {
+  alert('Results imported successfully!\n\n5 entries added to Potomac Hunt Races — Race 1.\n\nIn production, this writes to the database and updates the public results page.');
+  clearUpload();
+}
+
+let manualEntryCount = 3;
+function addManualEntry() {
+  manualEntryCount++;
+  const container = document.getElementById('manualEntries');
+  const row = document.createElement('div');
+  row.className = 'manual-entry-row';
+  row.style.cssText = 'background: var(--cream); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 10px;';
+  row.innerHTML = `
+    <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+      <strong style="font-size: 14px; min-width: 20px;">${manualEntryCount}.</strong>
+      <input type="text" class="form-input" placeholder="Horse name" style="flex: 2;">
+      <input type="number" class="form-input" placeholder="Wgt" style="flex: 0.5; min-width: 60px;">
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <input type="text" class="form-input" placeholder="Rider" style="flex: 1;">
+      <input type="text" class="form-input" placeholder="Owner" style="flex: 1;">
+      <input type="text" class="form-input" placeholder="Trainer" style="flex: 1;">
+    </div>
+  `;
+  container.appendChild(row);
+}
+
+function saveLocalDraft() {
+  alert('Draft saved to your device.\n\nIn production, this uses IndexedDB for reliable offline storage. The draft will appear in the "Pending Sync" tab and upload automatically when you reconnect.');
+  document.getElementById('syncStatus').innerHTML = '<div class="sync-dot"></div><span><strong>1 result pending</strong> — will sync when online</span>';
+}
+
+function saveAndSync() {
+  alert('Results saved and synced!\n\nIn production, if online this POSTs directly to the server. If offline, it saves locally and queues for sync.');
+}
+
+// ===== DRAG & DROP =====
+const uploadZone = document.getElementById('uploadZone');
+if (uploadZone) {
+  uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+  uploadZone.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadZone.classList.remove('drag-over');
+    document.getElementById('uploadZone').style.display = 'none';
+    document.getElementById('uploadPreview').classList.remove('hidden');
+  });
+}
+
+// ===== AUTH / LOGIN SYSTEM =====
+let currentUser = null; // { role: 'trainer'|'admin', name, email, profile: {...} }
+let selectedLoginRole = null;
+
+function openLogin() {
+  const modal = document.getElementById('loginModal');
+  modal.style.display = 'flex';
+  // Reset to step 1
+  document.getElementById('loginStep1').classList.remove('hidden');
+  document.getElementById('loginStep2').classList.add('hidden');
+  document.querySelectorAll('.role-option').forEach(o => o.classList.remove('selected'));
+  document.getElementById('loginContinueBtn').disabled = true;
+  selectedLoginRole = null;
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginPassword').value = '';
+}
+
+function closeLogin() {
+  document.getElementById('loginModal').style.display = 'none';
+}
+
+function selectRole(el, role) {
+  document.querySelectorAll('.role-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedLoginRole = role;
+  document.getElementById('loginContinueBtn').disabled = false;
+}
+
+function goToLoginStep2() {
+  if (!selectedLoginRole) return;
+  document.getElementById('loginStep1').classList.add('hidden');
+  document.getElementById('loginStep2').classList.remove('hidden');
+  if (selectedLoginRole === 'admin') {
+    document.getElementById('loginRoleIcon').innerHTML = '&#128274;';
+    document.getElementById('loginRoleText').textContent = 'Race Official / Admin';
+  } else {
+    document.getElementById('loginRoleIcon').innerHTML = '&#127943;';
+    document.getElementById('loginRoleText').textContent = 'Trainer / Owner';
+  }
+}
+
+function doLogin() {
+  // Demo mode: accept any credentials
+  const email = document.getElementById('loginEmail').value || 'zach@timbercreekfarm.com';
+  const name = email.includes('zach') ? 'Zach Miller' : email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  const initial = name.charAt(0).toUpperCase();
+
+  currentUser = {
+    role: selectedLoginRole || 'trainer',
+    name: name,
+    email: email,
+    profile: {
+      phone: '(540) 555-0192',
+      owner: 'Timber Creek Farm',
+      trainer: 'Walsh, G.',
+      colors: 'Green, gold sash, green cap',
+      weight: 165,
+      horses: [
+        { name: 'AMERICAN FARMER', detail: 'b. g. 2017, by Gio Ponti', lastRun: 'May 17, 2026' },
+        { name: 'BOURBON COURAGE', detail: 'ch. g. 2018, by Curlin', lastRun: 'Apr 11, 2026' },
+        { name: 'CHABLIS', detail: 'b. m. 2019, by Blame', lastRun: 'Mar 21, 2026' }
+      ]
+    }
+  };
+
+  // Close modal
+  closeLogin();
+
+  // Update header user bar
+  document.getElementById('userBar').classList.add('show');
+  document.getElementById('loginBtn').style.display = 'none';
+  document.getElementById('userAvatar').textContent = initial;
+  document.getElementById('userName').textContent = currentUser.name;
+  document.getElementById('userRole').textContent = currentUser.role === 'admin' ? 'Admin' : 'Trainer';
+  document.getElementById('userInfoText').style.display = '';
+
+  // Show/hide admin links
+  const showAdmin = currentUser.role === 'admin';
+  document.querySelectorAll('.admin-only').forEach(el => {
+    el.style.display = showAdmin ? '' : 'none';
+  });
+
+  // Admin page: toggle auth gate vs content
+  document.getElementById('adminAuthGate').classList.toggle('hidden', showAdmin);
+  document.getElementById('adminContent').classList.toggle('hidden', !showAdmin);
+
+  // Update mobile menu
+  document.getElementById('mobileLoginSection').style.display = 'none';
+  document.getElementById('mobileUserSection').style.display = '';
+  document.getElementById('mobileUserAvatar').textContent = initial;
+  document.getElementById('mobileUserName').textContent = currentUser.name;
+  document.getElementById('mobileUserRole').textContent = currentUser.role === 'admin' ? 'Admin' : 'Trainer';
+
+  // Update profile page
+  document.getElementById('profileNotLoggedIn').classList.add('hidden');
+  document.getElementById('profileLoggedIn').classList.remove('hidden');
+  document.getElementById('profileName').value = currentUser.name;
+  document.getElementById('profileEmail').value = currentUser.email;
+  document.getElementById('profileRoleDisplay').value = currentUser.role === 'admin' ? 'Administrator' : 'Trainer';
+
+  // Prefill entry form
+  prefillEntryForm();
+
+  // Show entry page profile banner, hide login prompt
+  document.getElementById('entryProfileBanner').classList.remove('hidden');
+  document.getElementById('entryBannerName').textContent = currentUser.name;
+  document.getElementById('entryLoginPrompt').style.display = 'none';
+}
+
+function prefillEntryForm() {
+  if (!currentUser || currentUser.role !== 'trainer') return;
+  const p = currentUser.profile;
+  const ownerInput = document.getElementById('entryOwner');
+  const trainerInput = document.getElementById('entryTrainer');
+  const weightInput = document.getElementById('entryWeight');
+  const colorsInput = document.getElementById('entryColors');
+  if (ownerInput && p.owner) ownerInput.value = p.owner;
+  if (trainerInput && p.trainer) trainerInput.value = p.trainer;
+  if (weightInput && p.weight) weightInput.value = p.weight;
+  if (colorsInput && p.colors) colorsInput.value = p.colors;
+}
+
+function logOut() {
+  currentUser = null;
+  selectedLoginRole = null;
+
+  // Hide user bar, show login button
+  document.getElementById('userBar').classList.remove('show');
+  document.getElementById('loginBtn').style.display = '';
+
+  // Hide all admin links
+  document.querySelectorAll('.admin-only').forEach(el => {
+    el.style.display = 'none';
+  });
+
+  // Reset admin page to gate
+  document.getElementById('adminAuthGate').classList.remove('hidden');
+  document.getElementById('adminContent').classList.add('hidden');
+
+  // Reset mobile menu
+  document.getElementById('mobileLoginSection').style.display = '';
+  document.getElementById('mobileUserSection').style.display = 'none';
+
+  // Reset profile page
+  document.getElementById('profileNotLoggedIn').classList.remove('hidden');
+  document.getElementById('profileLoggedIn').classList.add('hidden');
+
+  // Reset entry page
+  document.getElementById('entryProfileBanner').classList.add('hidden');
+  document.getElementById('entryLoginPrompt').style.display = '';
+  document.getElementById('entryOwner').value = '';
+  document.getElementById('entryTrainer').value = '';
+  document.getElementById('entryWeight').value = '';
+  document.getElementById('entryColors').value = '';
+
+  // Go home
+  showPage('home');
+}
+
+function handleAccountTap() {
+  if (currentUser) {
+    showPage('profile');
+  } else {
+    openLogin();
+  }
+}
+
+function handleEnterHorse() {
+  if (currentUser) {
+    showPage('entry');
+  } else {
+    openLogin();
+  }
+}
+
+function saveProfile() {
+  if (!currentUser) return;
+  currentUser.name = document.getElementById('profileName').value;
+  currentUser.email = document.getElementById('profileEmail').value;
+  currentUser.profile.phone = document.getElementById('profilePhone').value;
+  currentUser.profile.owner = document.getElementById('profileOwner').value;
+  currentUser.profile.trainer = document.getElementById('profileTrainer').value;
+  currentUser.profile.colors = document.getElementById('profileColors').value;
+  currentUser.profile.weight = parseInt(document.getElementById('profileWeight').value) || 165;
+
+  // Update header
+  const initial = currentUser.name.charAt(0).toUpperCase();
+  document.getElementById('userAvatar').textContent = initial;
+  document.getElementById('userName').textContent = currentUser.name;
+  document.getElementById('mobileUserAvatar').textContent = initial;
+  document.getElementById('mobileUserName').textContent = currentUser.name;
+  document.getElementById('entryBannerName').textContent = currentUser.name;
+
+  // Re-prefill entry form
+  prefillEntryForm();
+
+  alert('Profile saved! Your default entry info has been updated.');
+}
+
+function addHorseToRoster() {
+  const name = prompt('Horse name (e.g., BOLD VENTURE):');
+  if (!name) return;
+  const detail = prompt('Description (e.g., b. g. 2020, by Kitten\'s Joy):') || '';
+  const horse = { name: name.toUpperCase(), detail: detail, lastRun: 'Not yet' };
+  if (currentUser) currentUser.profile.horses.push(horse);
+
+  const container = document.getElementById('horseRoster');
+  const div = document.createElement('div');
+  div.className = 'horse-roster-item';
+  div.innerHTML = `
+    <div>
+      <div class="saved-horse-name">${horse.name}</div>
+      <div class="saved-horse-detail">${horse.detail} &middot; Last run: ${horse.lastRun}</div>
+    </div>
+    <button class="btn btn-sm btn-secondary">Edit</button>
+  `;
+  container.appendChild(div);
+}
+
+// ===== UPDATED NAVIGATION =====
+// Override showPage to handle profile + auth checks
+const _originalShowPage = showPage;
+showPage = function(pageId) {
+  // Profile requires login
+  if (pageId === 'profile' && !currentUser) {
+    openLogin();
+    return;
+  }
+  // Admin check — show gate if not admin
+  if (pageId === 'admin') {
+    if (currentUser && currentUser.role === 'admin') {
+      document.getElementById('adminAuthGate').classList.add('hidden');
+      document.getElementById('adminContent').classList.remove('hidden');
+    } else {
+      document.getElementById('adminAuthGate').classList.remove('hidden');
+      document.getElementById('adminContent').classList.add('hidden');
+    }
+  }
+
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + pageId).classList.add('active');
+  document.querySelectorAll('[data-page]').forEach(a => {
+    a.classList.toggle('active', a.dataset.page === pageId);
+  });
+  window.scrollTo(0, 0);
+};
+
+// Close login modal on overlay click
+document.getElementById('loginModal').addEventListener('click', function(e) {
+  if (e.target === this) closeLogin();
+});
+
+// ===== OFFLINE DETECTION =====
+window.addEventListener('offline', () => document.getElementById('offlineBar').classList.add('show'));
+window.addEventListener('online', () => document.getElementById('offlineBar').classList.remove('show'));
+</script>
+</body>
+</html>
