@@ -1688,6 +1688,7 @@ footer .footer-contact { line-height: 1.8; }
       <div class="tab-bar" style="margin:0; flex-shrink:0;">
         <button class="tab-btn active" onclick="archiveSwitchTab(this, 'starts')">Starts</button>
         <button class="tab-btn" onclick="archiveSwitchTab(this, 'leaders')">Leaderboards</button>
+        <button class="tab-btn" onclick="archiveSwitchTab(this, 'hp')">Hunter Paces</button>
       </div>
       <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
         <span id="archiveCount" style="color:var(--text-muted); font-size:13px;"></span>
@@ -1713,6 +1714,27 @@ footer .footer-contact { line-height: 1.8; }
         </thead>
         <tbody id="archiveTbody"></tbody>
       </table>
+    </div>
+
+        <!-- Hunter paces (own table since 2026-10-05; hidden until tab switch) -->
+    <div id="archiveHP" style="display:none;">
+      <p style="color:var(--text-secondary); font-size:13px; margin:0 0 14px; max-width:760px;">
+        Hunter paces are timed team rides, not races, so they are kept apart from the race record and never
+        count toward a horse's, rider's or trainer's racing totals. Teams are listed with each rider's horse and hunt.</p>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:14px;">
+        <input type="text" class="form-input" id="hpSearch" placeholder="Rider, horse, hunt or meet&hellip;"
+          style="flex:1 1 220px; min-width:180px;" oninput="hpRender()" autocomplete="off">
+        <select class="form-select" id="hpYear" style="width:auto;" onchange="hpRender()"><option value="">All years</option></select>
+        <select class="form-select" id="hpDiv" style="width:auto;" onchange="hpRender()"><option value="">All divisions</option></select>
+        <span id="hpCount" style="color:var(--text-muted); font-size:13px;"></span>
+        <button class="btn btn-sm btn-secondary" onclick="hpExportCSV()">Download CSV</button>
+      </div>
+      <div style="background:white; border:1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); overflow-x:auto;">
+        <table class="data-table" id="hpTable" style="width:100%; font-size:13.5px;">
+          <thead><tr><th>Date</th><th>Meet</th><th>Event</th><th>Division</th><th>Place</th><th>Team</th></tr></thead>
+          <tbody id="hpTbody"><tr><td colspan="6" style="color:var(--text-muted);">Loading&hellip;</td></tr></tbody>
+        </table>
+      </div>
     </div>
 
     <!-- Leaderboard (hidden until tab switch) -->
@@ -2443,6 +2465,7 @@ function submitEntry() {
 
 // ===== ARCHIVE / REPORTS =====
 let DEMO_ARCHIVE = [];
+let HUNTER_PACE = [];
 let ARCHIVE_VOCAB = {};
 let ARCHIVE_META = {};
 
@@ -2464,6 +2487,7 @@ async function archiveLoad() {
   const p = JSON.parse(text);
   const F = p.f, V = p.v;
   ARCHIVE_META = p.counts; ARCHIVE_META.built = p.built;
+  HUNTER_PACE = (p.hp && p.hp.r) ? p.hp.r.map(r => { const o = {}; p.hp.f.forEach((k, i) => o[k] = r[i]); return o; }) : [];
   // names are stored once and referenced by index -- rebuild the row objects
   DEMO_ARCHIVE = p.r.map(row => {
     const o = {};
@@ -2757,6 +2781,10 @@ function archiveSwitchTab(btn, tab) {
   document.getElementById('archiveTableWrap').style.display = tab === 'starts' ? '' : 'none';
   document.getElementById('archiveLeaders').style.display = tab === 'leaders' ? '' : 'none';
   if (tab === 'leaders') archiveLoadLeaders();
+  const hpEl = document.getElementById('archiveHP');
+  if (hpEl) hpEl.style.display = tab === 'hp' ? '' : 'none';
+  ['archiveStats', 'archiveChips'].forEach(id => { const e = document.getElementById(id); if (e) e.style.visibility = tab === 'hp' ? 'hidden' : ''; });
+  if (tab === 'hp') hpRender();
 }
 
 function archiveLoadLeaders() {
@@ -3161,11 +3189,78 @@ window.addEventListener('online', () => document.getElementById('offlineBar').cl
     if (Object.keys(archiveFilters).length) archiveRun();   // a search typed before loading finished
     const lb = document.getElementById('archiveLeaders');
     if (lb && lb.style.display !== 'none') archiveLoadLeaders();
+    const hpPanel = document.getElementById('archiveHP');
+    if (hpPanel && hpPanel.style.display !== 'none') hpRender();
   }).catch(e => {
     if (el) el.textContent = 'The archive could not be loaded: ' + e.message;
     console.error(e);
   });
 })();
+</script>
+<script>
+/* ===== HUNTER PACES (2026-10-05) ===== */
+let hpTeamsCache = null, hpLastShown = [];
+function hpEsc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function hpTeams() {
+  if (hpTeamsCache) return hpTeamsCache;
+  const by = new Map();
+  HUNTER_PACE.forEach(r => {
+    if (!by.has(r.team)) by.set(r.team, { iso: r.iso, date: r.date, meet: r.meet, event: r.event, division: r.division,
+                                           place: r.place, members: [], review: 0 });
+    const t = by.get(r.team); t.members.push(r); if (r.review) t.review = 1;
+  });
+  hpTeamsCache = Array.from(by.values());
+  hpTeamsCache.forEach(t => {
+    t.members.sort((a, b) => a.member - b.member);
+    t.text = [t.meet, t.event, t.division].concat(t.members.map(m => m.rider + ' ' + m.horse + ' ' + m.hunt)).join(' ').toLowerCase();
+  });
+  hpTeamsCache.sort((a, b) => (b.iso.localeCompare(a.iso)) || a.meet.localeCompare(b.meet) || a.event.localeCompare(b.event)
+                           || a.division.localeCompare(b.division) || ((parseInt(a.place) || 99) - (parseInt(b.place) || 99)));
+  const years = Array.from(new Set(hpTeamsCache.map(t => t.iso.slice(0, 4)))).sort().reverse();
+  const divs = Array.from(new Set(hpTeamsCache.map(t => t.division).filter(Boolean))).sort();
+  const ys = document.getElementById('hpYear'), ds = document.getElementById('hpDiv');
+  if (ys && ys.options.length < 2) years.forEach(y => ys.add(new Option(y, y)));
+  if (ds && ds.options.length < 2) divs.forEach(d => ds.add(new Option(d, d)));
+  return hpTeamsCache;
+}
+function hpRender() {
+  const body = document.getElementById('hpTbody'); if (!body) return;
+  if (!HUNTER_PACE.length) { body.innerHTML = '<tr><td colspan="6" style="color:var(--text-muted);">Loading&hellip;</td></tr>'; return; }
+  const q = (document.getElementById('hpSearch').value || '').trim().toLowerCase();
+  const y = document.getElementById('hpYear').value, d = document.getElementById('hpDiv').value;
+  const words = q ? q.split(/\s+/) : [];
+  const shown = hpTeams().filter(t => (!y || t.iso.startsWith(y)) && (!d || t.division === d)
+                                     && words.every(w => t.text.includes(w)));
+  hpLastShown = shown;
+  const nRiders = shown.reduce((n, t) => n + t.members.length, 0);
+  document.getElementById('hpCount').textContent = shown.length.toLocaleString() + ' teams \u00b7 ' + nRiders.toLocaleString() + ' riders';
+  const LIMIT = 400;
+  body.innerHTML = shown.slice(0, LIMIT).map(t =>
+    '<tr>' +
+      '<td data-label="Date" style="white-space:nowrap;">' + hpEsc(t.date) + '</td>' +
+      '<td data-label="Meet">' + hpEsc(t.meet) + '</td>' +
+      '<td data-label="Event">' + hpEsc(t.event) + '</td>' +
+      '<td data-label="Division">' + hpEsc(t.division) + '</td>' +
+      '<td data-label="Place" style="font-weight:700;' + (t.place === '1' ? ' color:var(--gold-dark);' : '') + '">' + hpEsc(t.place) + '</td>' +
+      '<td data-label="Team">' + t.members.map(m =>
+          '<div style="line-height:1.45;"><strong>' + hpEsc(m.rider) + '</strong>' +
+          (m.horse ? ' on <em>' + hpEsc(m.horse) + '</em>' : '') +
+          (m.hunt ? ' <span style="color:var(--text-muted);">&middot; ' + hpEsc(m.hunt) + '</span>' : '') + '</div>').join('') +
+        (t.review ? '<div style="color:var(--text-muted); font-size:11px;" title="The original listing ran the names together; this split may be wrong.">names need checking</div>' : '') +
+      '</td>' +
+    '</tr>').join('') +
+    (shown.length > LIMIT ? '<tr><td colspan="6" style="color:var(--text-muted);">Showing the first ' + LIMIT +
+       ' teams. Narrow by year, division or name to see the rest.</td></tr>' : '') +
+    (shown.length ? '' : '<tr><td colspan="6" style="color:var(--text-muted);">No hunter pace teams match.</td></tr>');
+}
+function hpExportCSV() {
+  const rows = [['Date', 'Meet', 'Event', 'Division', 'Team place', 'Rider', 'Horse', 'Hunt']];
+  hpLastShown.forEach(t => t.members.forEach(m => rows.push([t.iso, t.meet, t.event, t.division, t.place, m.rider, m.horse, m.hunt])));
+  const csv = rows.map(r => r.map(v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"').join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+  a.download = 'hunter_paces.csv'; a.click();
+}
 </script>
 </body>
 </html>
