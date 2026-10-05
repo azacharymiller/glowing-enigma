@@ -2784,6 +2784,7 @@ function archiveSwitchTab(btn, tab) {
   const hpEl = document.getElementById('archiveHP');
   if (hpEl) hpEl.style.display = tab === 'hp' ? '' : 'none';
   ['archiveStats', 'archiveChips'].forEach(id => { const e = document.getElementById(id); if (e) e.style.visibility = tab === 'hp' ? 'hidden' : ''; });
+  const tools = document.getElementById('archiveCount'); if (tools) tools.parentElement.style.visibility = tab === 'hp' ? 'hidden' : '';
   if (tab === 'hp') hpRender();
 }
 
